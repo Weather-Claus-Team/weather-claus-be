@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+    driver-class-name: ${DRIVER_CLASS_NAME}
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: ${DATABASE_PLATFORM}
+    properties:
+      hibernate:
+        format_sql: true
+
+
+server:
+  port:${SERVER_PORT}
+
+
+logging.level:
+  org.springframework.cache: trace # Redis 사용에 대한 로그가 조회되도록 설정
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+
+
+
+
+
+

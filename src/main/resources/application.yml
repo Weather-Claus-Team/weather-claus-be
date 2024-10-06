@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: local
+    include: secret
+
+#    배포테스트 시 dev 활성화
+#    include: dev
+
+#    실제 운영 시 prod 활성화
+#    include: prod
+
+
+
+
+
+
