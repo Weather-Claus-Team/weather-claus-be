@@ -6,16 +6,14 @@ import lombok.Setter;
 
 import java.util.List;
 
-
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WeatherResponse {
-
-    private String cod;
-    private int message;
-    private int cnt;
-    private List<WeatherData> list;
-    private City city;
-
+public class WeatherData {
+    private long dt;
+    private Main main;
+    private List<Weather> weather;
+    private int visibility;
+    private double pop;
+    private String dt_txt;
 }
