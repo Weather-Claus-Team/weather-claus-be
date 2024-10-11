@@ -1,0 +1,12 @@
+services:
+  my-server:
+    build: .
+    ports:
+      - ${SPRING_PORT}:${SPRING_PORT}
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      mysql-server:
+        condition: service_healthy
+      my-cache-server:
+        condition: service_healthy
