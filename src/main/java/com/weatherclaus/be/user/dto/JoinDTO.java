@@ -11,4 +11,5 @@ public class JoinDTO {
     private String email;
     private String password;
     private String checkpassword;
+    private String token;
 }

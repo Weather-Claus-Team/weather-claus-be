@@ -2,6 +2,7 @@ package com.weatherclaus.be.user.controller;
 
 import com.weatherclaus.be.user.dto.JoinDTO;
 import com.weatherclaus.be.user.service.JoinService;
+import com.weatherclaus.be.user.service.RecaptchaService;
 import com.weatherclaus.be.weather.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,22 @@ public class JoinController {
 
     private final JoinService joinService;
 
+    private final RecaptchaService recaptchaService;
+
     // 회원가입
     @PostMapping("/join")
     public ResponseEntity<ResponseDto<?>> joinProcess(@RequestBody JoinDTO joinDTO) {
+
+        boolean isHuman = recaptchaService.verifyRecaptcha(joinDTO.getToken());
+
+        if (!isHuman) {
+//          일단은 이렇게 하는데 이부분은 오히려 서비스에서 처리하고 컨트롤러 깔끔하게 처리하는 로직으로 가져가자. refactoring 요소
+            ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Invalid Argument", "invalid");
+
+            return new ResponseEntity<>(
+                    new ResponseDto<>("fail", "Invalid argument", null, errorDetails, 400),
+                    HttpStatus.BAD_REQUEST);
+        }
 
         joinService.joinProcess(joinDTO);
 
