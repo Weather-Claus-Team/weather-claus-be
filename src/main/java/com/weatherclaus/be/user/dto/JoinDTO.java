@@ -10,6 +10,6 @@ public class JoinDTO {
     private String username;
     private String email;
     private String password;
-    private String checkpassword;
+    private String password2;
     private String token;
 }

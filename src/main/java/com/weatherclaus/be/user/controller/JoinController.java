@@ -1,37 +1,35 @@
 package com.weatherclaus.be.user.controller;
 
+import com.weatherclaus.be.user.dto.EmailCode;
 import com.weatherclaus.be.user.dto.JoinDTO;
+import com.weatherclaus.be.user.service.EmailService;
 import com.weatherclaus.be.user.service.JoinService;
 import com.weatherclaus.be.user.service.RecaptchaService;
-import com.weatherclaus.be.weather.dto.ResponseDto;
+import com.weatherclaus.be.common.ResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/security")
+@RequestMapping("/api/users")
+@Slf4j
 public class JoinController {
 
     private final JoinService joinService;
 
-    private final RecaptchaService recaptchaService;
+
+    private final EmailService emailService;
+
 
     // 회원가입
-    @PostMapping("/join")
+    @PostMapping
     public ResponseEntity<ResponseDto<?>> joinProcess(@RequestBody JoinDTO joinDTO) {
 
-        boolean isHuman = recaptchaService.verifyRecaptcha(joinDTO.getToken());
 
-        if (!isHuman) {
-//          일단은 이렇게 하는데 이부분은 오히려 서비스에서 처리하고 컨트롤러 깔끔하게 처리하는 로직으로 가져가자. refactoring 요소
-            ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Invalid Argument", "invalid");
-
-            return new ResponseEntity<>(
-                    new ResponseDto<>("fail", "Invalid argument", null, errorDetails, 400),
-                    HttpStatus.BAD_REQUEST);
-        }
 
         joinService.joinProcess(joinDTO);
 
@@ -48,44 +46,40 @@ public class JoinController {
 
 
 
-    // 아이디 체크 (예정)
-    @GetMapping("/duplicateIdCheck")
-    public String duplicateCheck(JoinDTO joinDTO) {
+    // 아이디(username) 체크
+    @PostMapping("/username")
+    public ResponseEntity<ResponseDto<?>> duplicateCheck(@RequestBody JoinDTO joinDTO) {
 
-        String email = joinDTO.getEmail();
+        joinService.usernameDuplicateCheck(joinDTO.getUsername());
 
-
-
-        return "duplicateCheck";
+        return new ResponseEntity<>(
+                new ResponseDto<>("success", "username valid", null, null, 200),
+                HttpStatus.OK);
     }
 
-    // 비밀번호 체크 (예정)
-    @PostMapping("/passwordcheck")
-    public String passwordCheck(@RequestBody JoinDTO joinDTO) {
 
+    // 이메일 인증번호 발송
+    @PostMapping("/email")
+    public ResponseEntity<ResponseDto<?>> sendEmail(@RequestBody EmailCode emailCode) {
 
-        String password = joinDTO.getPassword();
-        String checkpassword = joinDTO.getCheckpassword();
+        emailService.sendContactEmail(emailCode.getEmail());
 
-
-
-        return "passwordcheck";
+        return new ResponseEntity<>(
+                new ResponseDto<>("success", "Email sent successfully", null, null, 200),
+                HttpStatus.OK);
     }
 
-    // 이메일 인증번호 발송 (예정)
-    @GetMapping("/verify")
-    public String verify(@RequestBody JoinDTO joinDTO) {
-        String email = joinDTO.getEmail();
 
+    // 이메일 인증번호 확인
+    @PostMapping("/email-code")
+    public ResponseEntity<ResponseDto<?>> checkVerificationCode(@RequestBody EmailCode emailCode) {
 
-        return "verify";
-    }
+        emailService.verifyCode(emailCode);
 
-    // 이메일 인증번호 확인 (예정)
-    @GetMapping("/verify/{number}")
-    public String virify2(@PathVariable Long number){
+        return new ResponseEntity<>(
+                new ResponseDto<>("success", "email-code Success", null, null, 200),
+                HttpStatus.OK);
 
-        return "verified";
     }
 
 

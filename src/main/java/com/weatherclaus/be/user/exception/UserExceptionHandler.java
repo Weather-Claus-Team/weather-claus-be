@@ -48,4 +48,13 @@ public class UserExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RecaptchaTokenInvalidException.class)
+    public ResponseEntity<ResponseDto<?>> RecaptchaTokenInvalidCheck(RecaptchaTokenInvalidException e) {
+        ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Bad Request", e.getMessage());
+
+        // 실패 시 400 상태 코드로 에러 응답
+        return new ResponseEntity<>(
+                new ResponseDto<>("fail", "Invalid request", null, errorDetails, 400),
+                HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,5 +1,9 @@
 package com.weatherclaus.be.user.service;
 
+import com.weatherclaus.be.user.dto.EmailCode;
+import com.weatherclaus.be.user.exception.CodeMismatchException;
+import com.weatherclaus.be.user.exception.EmailAlreadyExistsException;
+import com.weatherclaus.be.user.repository.UserRepsotiroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -24,16 +28,25 @@ public class EmailService {
 
     private final StringRedisTemplate redisTemplate;
 
+    private final UserRepsotiroy userRepsotiroy;
+
 
 
     // 사용자 정보를 인자로 받는 메소드로 확장
     public void sendContactEmail(String toEmail) {
+
+        if(userRepsotiroy.existsByEmail(toEmail)) {
+            throw new EmailAlreadyExistsException("email already exists");
+        }
+
+
+
         String[] to = {toEmail}; // 이메일을 받을 주소들
         String subject = "Weather Claus ! 회원가입 인증 메일입니다 ! "; // 메일 제목
         String text = buildEmailContent(toEmail); // 이메일 본문 조합
 
         SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom("goorm94@naver.com"); // 발신자 이메일 주소
+//        message.setFrom("~~@naver.com"); // 발신자 이메일 주소
         message.setTo(toEmail); // 수신자 이메일 주소
         message.setSubject(subject); // 메일 제목
         message.setText(text); // 메일 내용
@@ -50,11 +63,11 @@ public class EmailService {
 
 
 
-    public String verify(@PathVariable String email) {
+    public String verify(String email) {
         // 6자리 임의 숫자 생성
         String verificationCode = String.format("%06d", new Random().nextInt(1000000));
 
-        // Redis에 이메일을 키로, 인증 코드를 값으로 저장 (TTL 5분 설정)
+        // Redis에 이메일을 키로, 인증 코드를 값으로 저장 (TTL 10분 설정)
         ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
         valueOps.set(email, verificationCode, Duration.ofMinutes(10)); // 10분 동안 유효
 
@@ -66,22 +79,21 @@ public class EmailService {
     /**
      * 인증로직
      */
-    public String verifyCode(String email, String code)   {
+    public void verifyCode(EmailCode emailCode)   {
 
         // Redis에서 이메일에 해당하는 인증번호 조회
         ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
-        String storedCode = valueOps.get(email);
+        String storedCode = valueOps.get(emailCode.getEmail());
 
         // Redis에 저장된 인증번호가 없는 경우
         if (storedCode == null) {
-            return "Verification code expired or not found.";
+            throw new CodeMismatchException("code mismatch");
         }
 
-        if (storedCode.equals(code)) {
-            redisTemplate.delete(email);
-            return "Verification successful!";
+        if (storedCode.equals(emailCode.getCode())) {
+            redisTemplate.delete(emailCode.getEmail());
         } else {
-            return "Invalid verification code.";
+            throw new CodeMismatchException("code mismatch");
         }
     }
 }
