@@ -65,7 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
             writer.print("invalid access token");
 
             //response status code
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 

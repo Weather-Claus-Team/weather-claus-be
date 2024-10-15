@@ -1,6 +1,6 @@
 package com.weatherclaus.be.user.exception;
 
-import com.weatherclaus.be.weather.dto.ResponseDto;
+import com.weatherclaus.be.common.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,4 +37,15 @@ public class UserExceptionHandler {
                 new ResponseDto<>("fail", "Invalid request", null, errorDetails, 400),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(CodeMismatchException.class)
+    public ResponseEntity<ResponseDto<?>> CodeMismatchException(CodeMismatchException e) {
+        ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Bad Request", e.getMessage());
+
+        // 실패 시 400 상태 코드로 에러 응답
+        return new ResponseEntity<>(
+                new ResponseDto<>("fail", "Invalid request", null, errorDetails, 400),
+                HttpStatus.BAD_REQUEST);
+    }
+
 }

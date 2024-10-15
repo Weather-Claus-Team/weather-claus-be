@@ -1,9 +1,6 @@
 package com.weatherclaus.be.common.exception;
 
-import com.weatherclaus.be.user.exception.EmailAlreadyExistsException;
-import com.weatherclaus.be.user.exception.PasswordMismatchException;
-import com.weatherclaus.be.user.exception.UserAlreadyExistsException;
-import com.weatherclaus.be.weather.dto.ResponseDto;
+import com.weatherclaus.be.common.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
