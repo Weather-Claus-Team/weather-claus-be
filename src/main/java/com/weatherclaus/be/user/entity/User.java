@@ -1,12 +1,13 @@
 package com.weatherclaus.be.user.entity;
 
+import com.weatherclaus.be.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User{
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class User{
     @Column(unique = true, nullable = false)
     private String username;
 
-    // 이메일(인증여부 추후 확인할것.)
+    // 이메일
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -25,6 +26,7 @@ public class User{
     private Role role;
 
     // 비밀번호
+    @Column(nullable = false)
     private String password;
 
     @Builder
