@@ -67,7 +67,7 @@ public class ReissueController {
         // Check if the token from the request matches the one in Redis
         String storedRefreshToken = (String) redisTemplate.opsForValue().get(username);
         if (storedRefreshToken == null || !storedRefreshToken.equals(refresh)) {
-            return new ResponseEntity<>("Invalid refresh token", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
         //make new JWT

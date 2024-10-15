@@ -1,7 +1,7 @@
 package com.weatherclaus.be.weather.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.weatherclaus.be.weather.dto.ResponseDto;
+import com.weatherclaus.be.common.ResponseDto;
 import com.weatherclaus.be.weather.dto.LatLonDTO;
 import com.weatherclaus.be.weather.dto.WeatherResponse;
 import com.weatherclaus.be.weather.service.WeatherService;

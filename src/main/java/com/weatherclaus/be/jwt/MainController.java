@@ -14,7 +14,7 @@ import java.util.Iterator;
 @ResponseBody
 public class MainController {
 
-    @GetMapping("/")
+    @GetMapping("/myPage")
     public String mainP() {
 
         String name = SecurityContextHolder.getContext().getAuthentication().getName();

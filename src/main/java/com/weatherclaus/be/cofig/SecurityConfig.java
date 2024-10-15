@@ -74,7 +74,7 @@ public class SecurityConfig{
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/weather/forecast","api/security/**","/login","/reissue"
+                        .requestMatchers("/api/weather/forecast","api/users/**","/login","/reissue"
                         ,"/sendEmail","/verify").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
