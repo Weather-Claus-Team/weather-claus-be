@@ -5,10 +5,10 @@ spring:
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
     driver-class-name: ${DRIVER_CLASS_NAME}
-    hikari:
-      maximumPoolSize: 5        # 적은 커넥션 풀 크기 설정
-      idleTimeout: 30000        # 비활성 커넥션의 유지 시간 단축
-      connectionTimeout: 20000  # 커넥션 대기 시간 단축
+#    hikari:
+#      maximumPoolSize: 5        # 적은 커넥션 풀 크기 설정
+#      idleTimeout: 30000        # 비활성 커넥션의 유지 시간 단축
+#      connectionTimeout: 20000  # 커넥션 대기 시간 단축
 
   data:
     redis:
@@ -23,6 +23,30 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 server:
   port:${SERVER_PORT}
+
+logging:
+  level:
+    root: debug
+    org.springframework.cache: trace  # Redis 사용에 대한 상세 로그
+    org.hibernate.SQL: debug          # SQL 쿼리 로그
+    org.hibernate.orm.jdbc.bind: trace # Hibernate 6.x에서 SQL 바인딩 로그
+    org.springframework.web: debug    # Spring MVC 디버깅 로그 (예시)
+  file:
+    name: logs/dev-app.log  # 로그 파일 경로 설정
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 출력 포맷

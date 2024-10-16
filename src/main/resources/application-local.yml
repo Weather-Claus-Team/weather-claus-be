@@ -34,11 +34,20 @@ server:
   port:${SERVER_PORT}
 
 
-logging.level:
-  org.springframework.cache: trace # Redis 사용에 대한 로그가 조회되도록 설정
-  org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
-
+logging:
+  level:
+    root: debug                     # 모든 패키지에 대해 디버그 레벨 로그 출력
+    org.springframework.cache: trace  # Redis 캐시 사용 추적
+    org.hibernate.SQL: debug          # SQL 쿼리 로그 (개발용)
+    org.hibernate.orm.jdbc.bind: debug # SQL 바인딩 로그는 디버그 수준으로
+    org.springframework.web: debug    # Spring MVC 관련 로그
+    org.thymeleaf: debug              # Thymeleaf 템플릿 디버깅 (템플릿 엔진 사용 시)
+    com.example: trace                # 내가 개발한 패키지에 대해 trace 레벨
+  file:
+    name: logs/local-app.log          # 로컬 로그 파일 경로
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 출력 포맷
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"              # 파일 출력 포맷
 
 
 
