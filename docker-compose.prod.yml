@@ -1,7 +1,6 @@
 services:
   my-server:
-    image: ${AWS_IMAGE_URL} # 도커허브 링크로 가지는거 문제 없는지 체크필요함. 이상있으면 생으로 넣어보고 체크해보기.
-#    image: 002177417362.dkr.ecr.ap-northeast-2.amazonaws.com/instagram-server:latest
+    image: ${AWS_IMAGE_URL} # 도커허브 링크로 가지는거 문제 없는지 체크필요함 (체크완료, 문제없음 )
     ports:
       - ${SPRING_PORT}:${SPRING_PORT}
     environment:
