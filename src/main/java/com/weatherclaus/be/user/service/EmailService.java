@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Duration;
@@ -79,6 +80,7 @@ public class EmailService {
     /**
      * 인증로직
      */
+    @Transactional
     public void verifyCode(EmailCode emailCode)   {
 
         // Redis에서 이메일에 해당하는 인증번호 조회

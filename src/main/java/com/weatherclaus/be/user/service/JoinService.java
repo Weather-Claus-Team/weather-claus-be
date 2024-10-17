@@ -26,10 +26,10 @@ public class JoinService {
     private final RecaptchaService recaptchaService;
 
 
-    public void joinProcess(JoinDTO joinDTO) {
+    public void registerUser(JoinDTO joinDTO) {
 
 
-        recaptchaCheck(joinDTO.getToken());
+//        recaptchaCheck(joinDTO.getToken());
 
         validatePasswords(joinDTO.getPassword(), joinDTO.getPassword2());
         checkEmailDuplicate(joinDTO.getEmail());
