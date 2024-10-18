@@ -5,6 +5,10 @@ spring:
     username: ${LOCAL_DB_USERNAME}
     password: ${LOCAL_DB_PASSWORD}
     driver-class-name: ${DRIVER_CLASS_NAME}
+#    hikari:
+#      maximumPoolSize: 5        # 적은 커넥션 풀 크기 설정
+#      idleTimeout: 30000        # 비활성 커넥션의 유지 시간 단축
+#      connectionTimeout: 20000  # 커넥션 대기 시간 단축
 
   data:
     redis:
@@ -20,9 +24,38 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 server:
   port:${SERVER_PORT}
 
 
+
+logging:
+  level:
+    root: info                     # 일반적인 정보 로그
+    org.springframework.cache: warn  # Redis 캐시에서 문제 발생 시에만 로그
+    org.hibernate.SQL: error        # SQL 쿼리 실행 중 오류 발생 시 로그
+    org.hibernate.orm.jdbc.bind: error # 바인딩 문제 발생 시에만 로그
+  file:
+    name: logs/prod-app.log  # 로그 파일 경로 설정
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"  # 파일 출력 포맷
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n"           # 콘솔 출력은 간결하게
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB            # 로그 파일 최대 크기
+      max-history: 30                # 로그 파일 최대 보관 기간 (30일)
+      total-size-cap: 1GB            # 로그 파일의 전체 크기 제한
 

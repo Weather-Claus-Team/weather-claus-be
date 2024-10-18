@@ -1,4 +1,4 @@
-package com.weatherclaus.be.weather.dto;
+package com.weatherclaus.be.common;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,14 +9,14 @@ public class ResponseDto<T> {
     private String status;   // "success" 또는 "fail"
     private String message;  // 성공 또는 실패 메시지
     private T data;          // 응답 데이터 (성공 시)
-    private ErrorDetails error;  // 실패 시 오류 정보
+    private ErrorDetails errorDetails;  // 실패 시 오류 정보
     private int code;        // 상태 코드
 
     public ResponseDto(String status, String message, T data, ErrorDetails error, int code) {
         this.status = status;
         this.message = message;
         this.data = data;
-        this.error = error;
+        this.errorDetails = error;
         this.code = code;
     }
 
