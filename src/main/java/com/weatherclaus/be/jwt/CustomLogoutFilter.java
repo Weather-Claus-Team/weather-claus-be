@@ -31,6 +31,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
+        // access 토큰 없애는 방법
+
         //path and method verify
         String requestUri = request.getRequestURI();
         if (!requestUri.matches("^\\/logout$")) {
@@ -38,6 +40,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
             filterChain.doFilter(request, response);
             return;
         }
+
+
         String requestMethod = request.getMethod();
         if (!requestMethod.equals("POST")) {
 
@@ -80,6 +84,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
+
         }
 
         String username = jwtUtil.getUsername(refresh);
@@ -93,9 +98,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         // 로그아웃 처리: Redis   에서 refresh 토큰 제거
         redisTemplate.delete(username);
-
-        // 성공적인 로그아웃 응답
-        response.setStatus(HttpServletResponse.SC_OK);
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);

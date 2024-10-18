@@ -60,7 +60,7 @@ public class SecurityConfig{
 
         //csrf disable
         http
-                .cors(cors -> cors.disable()) // CORS 허용 (별도 설정 가능)
+//                .cors(cors -> cors.disable()) // CORS 허용 (별도 설정 가능) -> security랑, webconfig를 통해 특정포트만설정함.
                 .csrf((auth) -> auth.disable());
 
         //From 로그인 방식 disable
@@ -75,7 +75,7 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/weather/forecast","api/users/**","/login","/reissue"
-                        ,"/sendEmail","/verify").permitAll()
+                        ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
 

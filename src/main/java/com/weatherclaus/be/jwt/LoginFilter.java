@@ -6,7 +6,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @RequiredArgsConstructor
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -36,12 +39,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
 
-
-
-
-    // Post /login username,password가 기본 경로인듯.?? 아마도 ?
+    // Post /login username,password가 기본 경로
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+
+
         // JSON 요청 처리
         if ("application/json".equalsIgnoreCase(request.getContentType())) {
             try {
@@ -59,7 +61,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 return authenticationManager.authenticate(authToken);
 
             } catch (IOException e) {
-                throw new AuthenticationException("Error parsing JSON request", e) {};
+                throw new AuthenticationException("Error parsing JSON request") {};
             }
         }
 
@@ -67,54 +69,66 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         return super.attemptAuthentication(request, response);
     }
 
+
+
     //로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
 
-        //UserDetailsS
+
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
         String username = customUserDetails.getUsername();
+        String role = extractRole(authentication);
 
+
+        // 토큰 생성
+        String access = createAccessToken(username, role);
+        String refresh = createRefreshToken(username, role);
+
+
+        // 2. 서버의 Redis에 Refresh Token 저장 (username을 키로 사용)
+        storeRefreshTokenInRedis(username, refresh);
+
+        /**
+         * Authorization: Bearer <jwtToken> → 엑세스 토큰을 헤더에 보낼떄
+         */
+        //응답 설정
+        setResponseTokens(response, access, refresh);
+
+    }
+
+    private String extractRole(Authentication authentication) {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-
-        String role = auth.getAuthority();
-
-
-
-        //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
-
-
-        // 2. 서버의 Redis에 Refresh Token 저장 (userId를 키로 사용)
-        redisTemplate.opsForValue().set(username, refresh, 86400000L, TimeUnit.MILLISECONDS);
-
-
-        //응답 설정
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
-        response.setStatus(HttpStatus.OK.value());    }
-
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        //cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
+        return auth.getAuthority();
     }
+
+    private String createAccessToken(String username, String role) {
+        return jwtUtil.createAccessJwt(username, role);
+    }
+
+    private String createRefreshToken(String username, String role) {
+        return jwtUtil.createRefreshJwt(username, role);
+    }
+
+    private void storeRefreshTokenInRedis(String username, String refreshToken) {
+        redisTemplate.opsForValue().set(username, refreshToken, jwtUtil.getRefreshTokenExpiredMs(), TimeUnit.MILLISECONDS);
+    }
+
+    private void setResponseTokens(HttpServletResponse response, String accessToken, String refreshToken) {
+        response.setHeader("Authorization", "Bearer " + accessToken); // "Bearer " +
+        response.addCookie(jwtUtil.createCookie("refresh", refreshToken));
+        response.setStatus(HttpStatus.OK.value());
+    }
+
 
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
 
-        //로그인 실패시 401 응답 코드 반환
-        response.setStatus(401);
+        //로그인 실패시 400 응답 코드 반환
+        response.setStatus(400);
     }
 
 

@@ -64,34 +64,29 @@ public class ReissueController {
         String username = jwtUtil.getUsername(refresh);
         String role = jwtUtil.getRole(refresh);
 
-        // Check if the token from the request matches the one in Redis
+        // 레디스에 존재하는지 체크.
         String storedRefreshToken = (String) redisTemplate.opsForValue().get(username);
         if (storedRefreshToken == null || !storedRefreshToken.equals(refresh)) {
             return new ResponseEntity<>("Invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
-        //make new JWT
-        String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
-        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
-        // 6. Save new refresh token to Redis (overwriting the old one)
-        redisTemplate.opsForValue().set(username, newRefresh, 86400000L, TimeUnit.MILLISECONDS);
+
+
+        //make new JWT
+        String newAccess = jwtUtil.createAccessJwt(username, role);
+        String newRefresh = jwtUtil.createRefreshJwt(username, role);
+
+
+
+        // 레디스에 덮어쓰기.
+        redisTemplate.opsForValue().set(username, newRefresh, jwtUtil.getRefreshTokenExpiredMs(), TimeUnit.MILLISECONDS);
 
 
         //response
-        response.setHeader("access", newAccess);
-        response.addCookie(createCookie("refresh", newRefresh));
+        response.setHeader("Authorization", "Bearer "+ newAccess); // "Bearer "+
+        response.addCookie(jwtUtil.createCookie("refresh", newRefresh));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        //cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
-    }
 }
