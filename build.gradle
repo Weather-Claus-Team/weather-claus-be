@@ -36,6 +36,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // 시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
     // Jwt 토큰
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
@@ -53,6 +57,9 @@ dependencies {
     // Redis 직렬화 역직렬화
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate6:2.17.2'
+
+    // mail
+    implementation "org.springframework.boot:spring-boot-starter-mail"
 }
 
 clean {

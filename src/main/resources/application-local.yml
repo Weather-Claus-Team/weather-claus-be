@@ -18,16 +18,32 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port:${SERVER_PORT}
 
 
-logging.level:
-  org.springframework.cache: trace # Redis 사용에 대한 로그가 조회되도록 설정
-  org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
-
+logging:
+  level:
+    org.springframework.cache: trace # 캐시 문제 시에만 로그
+    org.hibernate.SQL: debug           # 쿼리 실행 정보를 최소화
+    org.hibernate.orm.jdbc.bind: trace # 바인딩 오류만 로그
+  file:
+    name: logs/local-app.log          # 로컬 로그 파일 경로
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"  # 콘솔 출력 포맷
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"               # 파일 출력 포맷
 
 
 

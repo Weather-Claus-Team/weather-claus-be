@@ -1,6 +1,6 @@
-package com.weatherclaus.be.weather.exception;
+package com.weatherclaus.be.common.exception;
 
-import com.weatherclaus.be.weather.dto.ResponseDto;
+import com.weatherclaus.be.common.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto<?>> handleException(Exception e) {
