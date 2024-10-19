@@ -37,8 +37,6 @@ spring:
             enable: true
 
 
-server:
-  port:${SERVER_PORT}
 
 
 

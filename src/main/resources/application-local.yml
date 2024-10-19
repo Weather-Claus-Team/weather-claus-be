@@ -30,8 +30,6 @@ spring:
           starttls:
             enable: true
 
-server:
-  port:${SERVER_PORT}
 
 
 logging:

@@ -23,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -74,7 +75,7 @@ public class SecurityConfig{
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/weather/forecast","api/users/**","/login","/reissue"
+                        .requestMatchers("/api/weather/forecast","api/users/**","/login","/health","/reissue"
                         ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
@@ -103,7 +104,16 @@ public class SecurityConfig{
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        // 허용할 Origin을 여러 개 추가
+                        configuration.setAllowedOrigins(Arrays.asList(
+                                "http://localhost:3000",
+                                "http://weather-claus-static-files.s3-website.ap-northeast-2.amazonaws.com",
+                                "https://d2gm6q97x0ibvz.cloudfront.net",
+                                "https://mungwithme.com",
+                                "http://mungwithme.com",
+                                "mungwithme.com",
+                                "d2gm6q97x0ibvz.cloudfront.net"
+                        ));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));

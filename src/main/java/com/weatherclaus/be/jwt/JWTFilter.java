@@ -40,7 +40,8 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/logout")
                 || path.equals("/reissue")
                 || path.startsWith("/api/users")
-                || path.startsWith("/api/weather/forecast");
+                || path.startsWith("/api/weather/forecast")
+                || path.startsWith("/health");
 
     }
 
