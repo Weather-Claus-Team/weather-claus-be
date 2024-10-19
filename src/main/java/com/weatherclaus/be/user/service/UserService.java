@@ -1,6 +1,5 @@
 package com.weatherclaus.be.user.service;
 
-import com.weatherclaus.be.common.ResponseDto;
 import com.weatherclaus.be.user.dto.JoinDTO;
 import com.weatherclaus.be.user.entity.Role;
 import com.weatherclaus.be.user.entity.User;
@@ -10,8 +9,6 @@ import com.weatherclaus.be.user.exception.RecaptchaTokenInvalidException;
 import com.weatherclaus.be.user.exception.UserAlreadyExistsException;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class JoinService {
+public class UserService {
 
     private final UserRepsotiroy userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
