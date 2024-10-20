@@ -14,7 +14,7 @@ public class WeatherExceptionHandler {
 
 
     @ExceptionHandler({InvalidLatLonException.class,WeatherResponseNullException.class, ExternalApiException.class, CityNotFoundException.class})
-    public ResponseEntity<ResponseDto<?>> handleInvalidLatLonException(InvalidLatLonException e) {
+    public ResponseEntity<ResponseDto<?>> handleInvalidLatLonException(Exception e) {
         ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Bad Request", e.getMessage());
 
         return new ResponseEntity<>(

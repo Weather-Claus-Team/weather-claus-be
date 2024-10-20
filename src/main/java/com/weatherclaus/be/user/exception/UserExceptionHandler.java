@@ -3,6 +3,7 @@ package com.weatherclaus.be.user.exception;
 import com.weatherclaus.be.common.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,8 +50,8 @@ public class UserExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RecaptchaTokenInvalidException.class)
-    public ResponseEntity<ResponseDto<?>> RecaptchaTokenInvalidCheck(RecaptchaTokenInvalidException e) {
+    @ExceptionHandler({RecaptchaTokenInvalidException.class, UsernameNotFoundException.class})
+    public ResponseEntity<ResponseDto<?>> RecaptchaTokenInvalidCheck(Exception e) {
         ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Bad Request", e.getMessage());
 
         // 실패 시 400 상태 코드로 에러 응답
