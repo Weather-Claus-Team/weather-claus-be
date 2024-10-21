@@ -28,22 +28,22 @@ public class JWTFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        // 예외 처리할 경로들 설정
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-
-
-        // 여기에 permitAll 경로 추가
-        return path.equals("/login")
-                || path.equals("/logout")
-                || path.equals("/reissue")
-                || path.startsWith("/api/users")
-                || path.startsWith("/api/weather/forecast")
-                || path.startsWith("/health");
-
-    }
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        // 예외 처리할 경로들 설정
+//        String path = request.getRequestURI();
+//        String method = request.getMethod();
+//
+//
+//        // 여기에 permitAll 경로 추가
+//        return path.equals("/login")
+//                || path.equals("/logout")
+//                || path.equals("/reissue")
+//                || path.startsWith("/api/users")
+//                || path.startsWith("/api/weather/forecast")
+//                || path.startsWith("/health");
+//
+//    }
 
 
 

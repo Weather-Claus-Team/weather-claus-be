@@ -1,6 +1,6 @@
 package com.weatherclaus.be.user.service;
 
-import com.weatherclaus.be.user.dto.EmailCode;
+import com.weatherclaus.be.user.dto.request.EmailCodeRequest;
 import com.weatherclaus.be.user.exception.CodeMismatchException;
 import com.weatherclaus.be.user.exception.EmailAlreadyExistsException;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
@@ -11,7 +11,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Duration;
 import java.util.Random;
@@ -81,7 +80,7 @@ public class EmailService {
      * 인증로직
      */
     @Transactional
-    public void verifyCode(EmailCode emailCode)   {
+    public void verifyCode(EmailCodeRequest emailCode)   {
 
         // Redis에서 이메일에 해당하는 인증번호 조회
         ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
