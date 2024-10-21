@@ -76,6 +76,7 @@ public class SecurityConfig{
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/weather/forecast","api/users/**","/login","/health","/reissue"
+                                ,"/","/swagger-ui/**", "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
