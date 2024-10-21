@@ -1,4 +1,4 @@
-package com.weatherclaus.be.user.dto;
+package com.weatherclaus.be.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EmailDTO {
+public class EmailRequest {
 
 
     @NotBlank

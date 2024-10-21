@@ -1,4 +1,4 @@
-package com.weatherclaus.be.user.dto;
+package com.weatherclaus.be.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class JoinDTO {
+public class JoinRequest {
 
-    @NotBlank
-    @Size(min = 4, max = 20)
+    @NotBlank(message = "공백이면 안됩니다.")
+    @Size(min = 4, max = 20 , message = "username은 4~20이어야합니다")
     private String username;
 
     @Email
@@ -26,5 +26,5 @@ public class JoinDTO {
     @Size(min = 6)
     private String password2;
 
-    private String token;
+//    private String token;
 }
