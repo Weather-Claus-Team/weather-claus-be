@@ -29,11 +29,25 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+
+    @Column
+    private boolean isActive = true;
+
     @Builder
     public User(String username, String email, Role role, String password) {
         this.username = username;
         this.email = email;
         this.role = role;
+        this.password = password;
+    }
+
+    public void changeImageUrl(String url){
+        this.imageUrl = url;
+    }
+
+    public void changePassword(String password){
         this.password = password;
     }
 }
