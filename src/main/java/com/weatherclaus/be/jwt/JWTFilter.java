@@ -17,38 +17,38 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
+    private final List<String> permitAllUrls = List.of(
+            "/api/weather/forecast", "/api/users/**", "/login", "/health", "/reissue",
+            "/swagger-ui/**", "/v3/api-docs/**"
+    );
+
     public JWTFilter(JWTUtil jwtUtil) {
 
         this.jwtUtil = jwtUtil;
     }
 
-//    @Override
-//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-//        // 예외 처리할 경로들 설정
-//        String path = request.getRequestURI();
-//        String method = request.getMethod();
-//
-//
-//        // 여기에 permitAll 경로 추가
-//        return path.equals("/login")
-//                || path.equals("/logout")
-//                || path.equals("/reissue")
-//                || path.startsWith("/api/users")
-//                || path.startsWith("/api/weather/forecast")
-//                || path.startsWith("/health");
-//
-//    }
-
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+
+
+        // 토큰 검증을 우회할 경로들 ( permitAll 경로 토큰 들어왔을 때 무시하기 위한 방어로직 )
+        String uri = request.getRequestURI();
+        if (permitAllUrls.stream().anyMatch(uri::startsWith)) {
+            // 검증 없이 필터 체인 통과
+            filterChain.doFilter(request, response);
+
+            return;
+        }
 
         // 헤더에서 access키에 담긴 토큰을 꺼냄
         String accessToken = request.getHeader("Authorization");
