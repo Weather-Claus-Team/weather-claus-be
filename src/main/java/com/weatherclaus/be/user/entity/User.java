@@ -36,11 +36,12 @@ public class User extends BaseEntity {
     private boolean isActive = true;
 
     @Builder
-    public User(String username, String email, Role role, String password) {
+    public User(String username, String email, Role role, String password, String imageUrl) {
         this.username = username;
         this.email = email;
         this.role = role;
         this.password = password;
+        this.imageUrl = imageUrl;
     }
 
     public void changeImageUrl(String url){

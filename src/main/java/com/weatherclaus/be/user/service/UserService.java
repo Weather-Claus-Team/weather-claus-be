@@ -11,6 +11,7 @@ import com.weatherclaus.be.user.exception.*;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,9 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RecaptchaService recaptchaService;
     private final S3Service s3Service;
+
+    @Value("${USER_BASIC_IMAGE}")
+    private String imageUrl;
 
 
     public void registerUser(JoinRequest joinDTO) {
@@ -86,6 +90,7 @@ public class UserService {
                 .password(bCryptPasswordEncoder.encode(joinDTO.getPassword()))
                 .email(joinDTO.getEmail())
                 .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
+                .imageUrl(imageUrl)
                 .build();
     }
 
