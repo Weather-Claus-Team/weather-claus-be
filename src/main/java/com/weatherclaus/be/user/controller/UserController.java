@@ -61,7 +61,7 @@ public class UserController {
 
 
     // 아이디(username) 체크
-    @GetMapping("/username")
+    @PostMapping("/username")
     public ResponseEntity<ResponseDto<?>> duplicateCheck(@Valid @RequestBody UsernameRequest usernameDTO) {
 
         userService.usernameDuplicateCheck(usernameDTO.getUsername());
@@ -85,7 +85,7 @@ public class UserController {
 
 
     // 이메일 인증번호 확인
-    @GetMapping("/email-code")
+    @PostMapping("/email-code")
     public ResponseEntity<ResponseDto<?>> checkVerificationCode(@Valid @RequestBody EmailCodeRequest emailCode) {
 
         emailService.verifyCode(emailCode);
