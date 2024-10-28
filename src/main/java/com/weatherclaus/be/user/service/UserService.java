@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -91,12 +94,24 @@ public class UserService {
                 .email(joinDTO.getEmail())
                 .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
                 .imageUrl(imageUrl)
+                .nickname(UUID.randomUUID().toString())
+//        UUID.randomUUID().toString(); // UUID로 닉네임 초기화
                 .build();
     }
 
     // User 저장 메서드
     private void saveUser(User user) {
         userRepository.save(user);
+    }
+
+    public User findByUsername(String username) {
+
+        User user = userRepository.findByUsername(username);
+
+        if(user == null) {
+            throw new UsernameNotFoundException("Username not found.");
+        }
+        return user;
     }
 
 
