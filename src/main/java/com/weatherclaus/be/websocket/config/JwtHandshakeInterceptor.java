@@ -1,20 +1,19 @@
 package com.weatherclaus.be.websocket.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weatherclaus.be.common.ResponseDto;
 import com.weatherclaus.be.jwt.JWTUtil;
+import com.weatherclaus.be.user.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Slf4j
@@ -35,39 +34,61 @@ public class JwtHandshakeInterceptor extends HttpSessionHandshakeInterceptor {
 
 
 
-
         String token = null;
-        // HTTP 헤더에서 Authorization 헤더를 통해 JWT 토큰을 추출
+
         if (request instanceof ServletServerHttpRequest) {
             HttpServletRequest servletRequest = ((ServletServerHttpRequest) request).getServletRequest();
 
             String bearerToken = servletRequest.getHeader(HEADER_STRING);  // Authorization 헤더에서 값을 가져옴
 
             if (bearerToken == null || !bearerToken.startsWith(TOKEN_PREFIX)) {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.BAD_REQUEST);
                 return false;  // JWT 토큰이 없거나 잘못된 경우 바로 연결 중단
             }
 
                 token = bearerToken.substring(TOKEN_PREFIX.length());  // "Bearer " 접두사를 제거하고 토큰만 반환
 
+            try {
+                jwtUtil.isExpired(token);
+            }catch (ExpiredJwtException e) {
+                // 공통 응답 객체 생성
+                ResponseDto<?> responseDto = new ResponseDto<>("fail", "Invalid request", null,
+                        new ResponseDto.ErrorDetails("Bad Request", "Access token expired"), 401);
+
+                // ObjectMapper로 JSON 변환
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(responseDto);
+
+                // 응답 설정
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+//                response.setContentType("application/json");
+//                response.setCharacterEncoding("UTF-8");
+//                response.getWriter().write(jsonResponse);
+
+                //            프론트에서 재발급 로직해야함
+                // 예외 처리 후 즉시 반환하여 필터 체인 종료
+                return false;
+
+            }
+
 
             // 토큰 검증
-            if ((token != null && !jwtUtil.isExpired(token)) && jwtUtil.getCategory(token).equals("access")) {
+            if ((token != null) && jwtUtil.getCategory(token).equals("access")) {
                 String username = jwtUtil.getUsername(token);
 
 
 
-                // JWT로부터 사용자 권한(ROLE)도 추출할 수 있음 (여기서는 예시로 ROLE_USER로 고정)
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-
-                Authentication auth =  new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));
-
-                SecurityContextHolder.getContext().setAuthentication(auth);  // Spring Security 인증 정보 설정
+//                // JWT로부터 사용자 권한(ROLE)도 추출할 수 있음 (여기서는 예시로 ROLE_USER로 고정)
+//                SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+//
+//                Authentication auth =  new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));
+//
+//                SecurityContextHolder.getContext().setAuthentication(auth);  // Spring Security 인증 정보 설정
 
                 attributes.put("username", username);  // 세션에 사용자 정보 저장
                 return true;  // 인증 성공
             } else {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                response.setStatusCode(HttpStatus.BAD_REQUEST);
                 return false;  // 인증 실패
             }
         }
