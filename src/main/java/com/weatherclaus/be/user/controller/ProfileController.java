@@ -36,11 +36,7 @@ public class ProfileController {
 
 
 
-    //    정보 보여주기
-//  username ( login할 때 쓰는ID )
-//    email
-//    imageUrl
-//    보류 - nickname ( 회원가입 추가 )
+//    유저 아이디, 이메일 정보, 이미지, 닉네임 보여주기
     @GetMapping("/myPage")
     public ResponseEntity<ResponseDto<?>> myPage() {
 
@@ -59,7 +55,9 @@ public class ProfileController {
     //	•	이 방식에서는 파일뿐만 아니라 여러 필드를 묶어서 DTO로 처리할 수 있습니다.
 //	•	이때 요청의 Content-Type은 반드시 **multipart/form-data**여야 합니다.
 //    변수명  file
-    @PatchMapping()
+//   이미지, 닉네임 수정
+//    file이 null인경우 이미지 변경 X,  nickname은 일단 와봐야안다.
+    @PatchMapping("/myPage")
     public ResponseEntity<ResponseDto<?>> updateUserInfo(@Valid @ModelAttribute UpdateUserRequest updateUserDTO) throws IOException {
 
         profileService.updateUserInfo(updateUserDTO);
