@@ -96,6 +96,17 @@ public class UserController {
 
     }
 
+    @PostMapping("/email-find")
+    public ResponseEntity<ResponseDto<?>> emailSendUsername(@Valid @RequestBody EmailRequest emailRequest) {
+
+        userService.sendUsername(emailRequest);
+
+        return new ResponseEntity<>(
+                new ResponseDto<>("success", "email-send Success", null, null, 200),
+                HttpStatus.OK);
+    }
+
+
 
 
 

@@ -75,7 +75,7 @@ public class UserExceptionHandler {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({RecaptchaTokenInvalidException.class, UsernameNotFoundException.class, AuthenticationNotValid.class})
+    @ExceptionHandler({RecaptchaTokenInvalidException.class, UsernameNotFoundException.class, AuthenticationNotValid.class,EmailNotFoundException.class})
     public ResponseEntity<ResponseDto<?>> RecaptchaTokenInvalidCheck(Exception e) {
         ResponseDto.ErrorDetails errorDetails = new ResponseDto.ErrorDetails("Bad Request", e.getMessage());
 

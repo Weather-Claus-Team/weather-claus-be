@@ -1,9 +1,6 @@
 package com.weatherclaus.be.user.service;
 
-import com.weatherclaus.be.user.dto.request.CurrentPasswordRequest;
-import com.weatherclaus.be.user.dto.request.JoinRequest;
-import com.weatherclaus.be.user.dto.request.UpdatePasswordRequest;
-import com.weatherclaus.be.user.dto.request.UpdateUserRequest;
+import com.weatherclaus.be.user.dto.request.*;
 import com.weatherclaus.be.user.dto.response.UserInfoResponse;
 import com.weatherclaus.be.user.entity.Role;
 import com.weatherclaus.be.user.entity.User;
@@ -34,6 +31,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RecaptchaService recaptchaService;
     private final S3Service s3Service;
+    private final EmailService emailService;
 
     @Value("${USER_BASIC_IMAGE}")
     private String imageUrl;
@@ -115,4 +113,15 @@ public class UserService {
     }
 
 
+    public void sendUsername(EmailRequest emailRequest) {
+
+        User user = userRepository.findByEmail(emailRequest.getEmail());
+
+        if(user == null) {
+            throw new EmailNotFoundException("Email not found.");
+        }
+
+        emailService.sendUsername(emailRequest.getEmail(), user.getUsername());
+
+    }
 }

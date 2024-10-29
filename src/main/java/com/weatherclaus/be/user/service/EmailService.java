@@ -4,6 +4,8 @@ import com.weatherclaus.be.user.dto.request.EmailCodeRequest;
 import com.weatherclaus.be.user.exception.CodeMismatchException;
 import com.weatherclaus.be.user.exception.EmailAlreadyExistsException;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -96,5 +98,19 @@ public class EmailService {
         } else {
             throw new CodeMismatchException("code mismatch");
         }
+    }
+
+    public void sendUsername(String email, String username) {
+
+        String subject = "Weather Claus ! 아이디 찾기 입니다 ! "; // 메일 제목
+        String text = email+"님 , 찾으시는 id는 "+username + "입니다"; // 이메일 본문 조합
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email); // 수신자 이메일 주소
+        message.setSubject(subject); // 메일 제목
+        message.setText(text); // 메일 내용
+        mailSender.send(message);
+
+
     }
 }
