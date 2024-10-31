@@ -87,11 +87,9 @@ jobs:
             rm -rf ./.env
             echo "$DOCKER_PROPERTIES" > ./.env
             aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin 323280431927.dkr.ecr.ap-northeast-2.amazonaws.com
-            
             docker rmi -f 323280431927.dkr.ecr.ap-northeast-2.amazonaws.com/weather-claus:latest
             docker rmi -f redis:latest
             docker rmi -f mysql:8.0.32
-            
             sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
             
             
