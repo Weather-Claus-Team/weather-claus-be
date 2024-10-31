@@ -3,7 +3,7 @@ name: Deploy To EC2
 on:
   push:
     branches:
-      - *
+      - '*'  # 모든 브랜치에 대해 워크플로 실행
 
 jobs:
   deploy:
