@@ -18,6 +18,7 @@ services:
 
   my-cache-server:
     image: redis
+    container_name: my-redis-container
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
     healthcheck:
