@@ -83,5 +83,5 @@ jobs:
           script_stop: true
           script: |
             rm -rf ./env
-            echo "DOCKER_PROPERTIES" > ./env
+            echo "$DOCKER_PROPERTIES" > ./env
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
