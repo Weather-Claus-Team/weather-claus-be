@@ -24,15 +24,23 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
-    private final List<String> permitAllUrls = List.of(
-            "/api/weather/forecast", "/api/users/**", "/login", "/health", "/reissue",
-            "/swagger-ui/**", "/v3/api-docs/**"
-    );
-
     public JWTFilter(JWTUtil jwtUtil) {
 
         this.jwtUtil = jwtUtil;
     }
+
+
+//    securityConfig의 petmit과 조금 다르게 . startswith여서 /경로 포함안되어야하고 조금 더 신경써야함.
+    private final List<String> permitAllUrls = List.of(
+            "/api/weather/forecast",
+            "/api/users",
+            "/api/chatList",
+            "/login",
+            "/health",
+            "/reissue",
+            "/swagger-ui",
+            "/v3/api-docs"
+    );
 
 
 
@@ -41,9 +49,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
 
-        // 토큰 검증을 우회할 경로들 ( permitAll 경로 토큰 들어왔을 때 무시하기 위한 방어로직 )
+        // 토큰 검증을 우회할 경로들 ( permitAll 경로 토큰 들어왔을 때 무시하기 위한 방어로직 및 필터체킹 )
         String uri = request.getRequestURI();
         if (permitAllUrls.stream().anyMatch(uri::startsWith)) {
+            log.info( uri+"  =>  토큰 검증X 경로 지나갔습니다.");
             // 검증 없이 필터 체인 통과
             filterChain.doFilter(request, response);
 
@@ -69,8 +78,8 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
 
             // 공통 응답 객체 생성
-            ResponseDto<?> responseDto = new ResponseDto<>("fail", "Invalid request", null,
-                    new ResponseDto.ErrorDetails("Bad Request", "Access token expired"), 401);
+            ResponseDto<?> responseDto = new ResponseDto<>("fail", "Expired access Token", null,
+                    new ResponseDto.ErrorDetails("Expired Token Request", "Access token expired"), 401);
 
             // ObjectMapper로 JSON 변환
             ObjectMapper objectMapper = new ObjectMapper();
@@ -85,7 +94,6 @@ public class JWTFilter extends OncePerRequestFilter {
             //            프론트에서 재발급 로직해야함
             // 예외 처리 후 즉시 반환하여 필터 체인 종료
             return;
-
         }
 
 
@@ -103,12 +111,15 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // username, role 값을 획득
         String username = jwtUtil.getUsername(accessToken);
+
+
         String role = jwtUtil.getRole(accessToken);
+        Role enumRole = role.equals("ROLE_USER") ? Role.USER : Role.ADMIN;
 
         //userEntity를 생성하여 값 set
         User user = User.builder()
                 .username(username)
-                .role(Role.USER)
+                .role(enumRole)
                 .password("temp").build();
 
 
