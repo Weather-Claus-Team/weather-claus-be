@@ -51,15 +51,10 @@ public class S3Service {
         // URL에서 파일 이름 추출
         String fileName = extractFileNameFromUrl(imageUrl);
 
-        log.info(fileName);
-
-        try {
             amazonS3.deleteObject(bucketName, fileName);
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
             log.info("File deleted successfully");
-        } catch (Exception e) {
-            log.error("Error deleting file from S3: {}", e.getMessage());
-        }
+
     }
 
     // URL에서 파일 이름 추출하는 메서드

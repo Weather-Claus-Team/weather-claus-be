@@ -15,7 +15,7 @@ public class User extends BaseEntity {
     private Long id;
 
     // 아이디(중복검사, 변경불가)
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, updatable = false)
     private String username;
 
     // 이메일

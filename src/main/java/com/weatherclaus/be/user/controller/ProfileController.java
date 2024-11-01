@@ -29,7 +29,7 @@ public class ProfileController {
 
     private final UpdatePasswordRequestValidator updatePasswordRequestValidator;
 
-    @InitBinder("updatePasswordDTO")
+    @InitBinder("updatePasswordRequest")
     protected void initBinderForUpdatePassword(WebDataBinder binder) {
         binder.addValidators(updatePasswordRequestValidator);
     }
@@ -104,9 +104,9 @@ public class ProfileController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<ResponseDto<?>> newPassword(@Valid @RequestBody UpdatePasswordRequest updatePasswordDTO) {
+    public ResponseEntity<ResponseDto<?>> newPassword(@Valid @RequestBody UpdatePasswordRequest updatePasswordRequest) {
 
-        profileService.updatePassword(updatePasswordDTO);
+        profileService.updatePassword(updatePasswordRequest);
 
 
         return new ResponseEntity<>(

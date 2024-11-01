@@ -3,7 +3,6 @@ package com.weatherclaus.be.user.controller;
 import com.weatherclaus.be.user.dto.request.*;
 import com.weatherclaus.be.user.dto.validation.EmailCodeRequestValidator;
 import com.weatherclaus.be.user.dto.validation.JoinRequestValidator;
-import com.weatherclaus.be.user.service.EmailService;
 import com.weatherclaus.be.user.service.UserService;
 import com.weatherclaus.be.common.ResponseDto;
 import jakarta.validation.Valid;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -24,20 +21,18 @@ public class UserController {
 
     private final UserService userService;
 
-    private final EmailService emailService;
-
     private final JoinRequestValidator joinRequestValidator;
 
     private final EmailCodeRequestValidator emailCodeRequestValidator;
 
 
 
-    @InitBinder("joinDTO")
+    @InitBinder("joinRequest")
     protected void initBinderForJoinRequest(WebDataBinder binder) {
         binder.addValidators(joinRequestValidator);
     }
 
-    @InitBinder("emailCode")
+    @InitBinder("emailCodeRequest")
     protected void initBinderForEmailCode(WebDataBinder binder) {
         binder.addValidators(emailCodeRequestValidator);
     }
@@ -47,10 +42,10 @@ public class UserController {
 
     // 회원가입
     @PostMapping
-    public ResponseEntity<ResponseDto<?>> joinProcess(@Valid @RequestBody JoinRequest joinDTO) {
+    public ResponseEntity<ResponseDto<?>> joinProcess(@Valid @RequestBody JoinRequest joinRequest) {
 
 
-        userService.registerUser(joinDTO);
+        userService.registerUser(joinRequest);
 
         return new ResponseEntity<>(
                 new ResponseDto<>("success", "Join Success", null, null, 200),
@@ -75,8 +70,7 @@ public class UserController {
     // 이메일 인증번호 발송
     @PostMapping("/email")
     public ResponseEntity<ResponseDto<?>> sendEmail(@Valid @RequestBody EmailRequest emailDTO) {
-
-        emailService.sendContactEmail(emailDTO.getEmail());
+        userService.sendEmailVerification(emailDTO.getEmail());
 
         return new ResponseEntity<>(
                 new ResponseDto<>("success", "Email sent successfully", null, null, 200),
@@ -86,9 +80,9 @@ public class UserController {
 
     // 이메일 인증번호 확인
     @PostMapping("/email-code")
-    public ResponseEntity<ResponseDto<?>> checkVerificationCode(@Valid @RequestBody EmailCodeRequest emailCode) {
+    public ResponseEntity<ResponseDto<?>> checkVerificationCode(@Valid @RequestBody EmailCodeRequest emailCodeRequest) {
 
-        emailService.verifyCode(emailCode);
+        userService.verifyEmailCode(emailCodeRequest);
 
         return new ResponseEntity<>(
                 new ResponseDto<>("success", "email-code Success", null, null, 200),

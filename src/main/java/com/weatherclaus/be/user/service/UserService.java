@@ -30,23 +30,20 @@ public class UserService {
     private final UserRepsotiroy userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RecaptchaService recaptchaService;
-    private final S3Service s3Service;
     private final EmailService emailService;
 
     @Value("${USER_BASIC_IMAGE}")
     private String imageUrl;
 
 
-    public void registerUser(JoinRequest joinDTO) {
+    public void registerUser(JoinRequest joinRequest) {
 
 
 //        recaptchaCheck(joinDTO.getToken());
+        checkEmailDuplicate(joinRequest.getEmail());
+        usernameDuplicateCheck(joinRequest.getUsername());
 
-//        validatePasswords(joinDTO.getPassword(), joinDTO.getPassword2());
-        checkEmailDuplicate(joinDTO.getEmail());
-        usernameDuplicateCheck(joinDTO.getUsername());
-
-        User user = createUser(joinDTO);
+        User user = createUser(joinRequest);
         saveUser(user);
     }
 
@@ -61,12 +58,6 @@ public class UserService {
         }
     }
 
-    // 비밀번호 확인 메서드
-    private void validatePasswords(String password, String checkPassword) {
-        if (!password.equals(checkPassword)) {
-            throw new PasswordMismatchException("Passwords do not match.");
-        }
-    }
 
     // 이메일 중복 확인 메서드
     private void checkEmailDuplicate(String email) {
@@ -85,15 +76,14 @@ public class UserService {
     }
 
     // User 엔터티 생성 메서드
-    private User createUser(JoinRequest joinDTO) {
+    private User createUser(JoinRequest joinRequest) {
         return User.builder()
-                .username(joinDTO.getUsername())
-                .password(bCryptPasswordEncoder.encode(joinDTO.getPassword()))
-                .email(joinDTO.getEmail())
-                .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
-                .imageUrl(imageUrl)
+                .username(joinRequest.getUsername())
+                .email(joinRequest.getEmail())
                 .nickname(UUID.randomUUID().toString())
-//        UUID.randomUUID().toString(); // UUID로 닉네임 초기화
+                .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
+                .password(bCryptPasswordEncoder.encode(joinRequest.getPassword()))
+                .imageUrl(imageUrl)
                 .build();
     }
 
@@ -101,6 +91,22 @@ public class UserService {
     private void saveUser(User user) {
         userRepository.save(user);
     }
+
+
+    public void sendEmailVerification(String email) {
+
+        if(userRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException("email already exists");
+        }
+
+        emailService.sendContactEmail(email);
+    }
+
+
+    public void verifyEmailCode(EmailCodeRequest emailCodeRequest) {
+        emailService.verifyCode(emailCodeRequest);
+    }
+
 
     public User findByUsername(String username) {
 
@@ -121,7 +127,12 @@ public class UserService {
             throw new EmailNotFoundException("Email not found.");
         }
 
-        emailService.sendUsername(emailRequest.getEmail(), user.getUsername());
+        emailService.sendUsername(user.getEmail(), user.getUsername());
 
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
 }

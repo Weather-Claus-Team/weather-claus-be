@@ -29,7 +29,7 @@ public class ProfileService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final S3Service s3Service;
-    private final UserRepsotiroy userRepository;
+    private final UserService userService;
 
     @Value("${USER_BASIC_IMAGE}")
     private String basic_Image;
@@ -48,13 +48,12 @@ public class ProfileService {
 
         String username = authentication.getName(); // 인증된 유저의 username 가져오기
 
-        return userRepository.findByUsername(username);
+        return userService.findByUsername(username);
 
     }
 
     // User 정보 메서드
     public UserInfoResponse getUserInfo() {
-
 
         User user = getUser();
 
@@ -64,7 +63,6 @@ public class ProfileService {
                 .imageUrl(user.getImageUrl())
                 .nickname(user.getNickname())
                 .build();
-
     }
 
     public void updateUserInfo(UpdateUserRequest updateUserDTO) throws IOException {
@@ -96,11 +94,7 @@ public class ProfileService {
 
         }
 
-
-
-        String nickname = updateUserDTO.getNickname();
-
-        user.changeNickname(nickname);
+        user.changeNickname(updateUserDTO.getNickname());
 
     }
 
@@ -130,7 +124,7 @@ public class ProfileService {
     public void deleteUser() {
         User user = getUser();
 
-        userRepository.delete(user);
+        userService.deleteUser(user);
     }
 
 }

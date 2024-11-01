@@ -37,12 +37,6 @@ public class EmailService {
     // 사용자 정보를 인자로 받는 메소드로 확장
     public void sendContactEmail(String toEmail) {
 
-        if(userRepsotiroy.existsByEmail(toEmail)) {
-            throw new EmailAlreadyExistsException("email already exists");
-        }
-
-
-
         String[] to = {toEmail}; // 이메일을 받을 주소들
         String subject = "Weather Claus ! 회원가입 인증 메일입니다 ! "; // 메일 제목
         String text = buildEmailContent(toEmail); // 이메일 본문 조합
@@ -90,7 +84,7 @@ public class EmailService {
 
         // Redis에 저장된 인증번호가 없는 경우
         if (storedCode == null) {
-            throw new CodeMismatchException("code mismatch");
+            throw new CodeMismatchException("code expired");
         }
 
         if (storedCode.equals(emailCode.getCode())) {
