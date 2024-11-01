@@ -75,8 +75,16 @@ public class SecurityConfig{
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/weather/forecast","api/users/**","/login","/health","/reissue"
-                                ,"/","/swagger-ui/**", "/v3/api-docs/**","/api/chatList"
+                        .requestMatchers(
+                                "/api/weather/forecast",
+                                "api/users/**",
+                                "/api/chatList",
+                                "/login",
+                                "/health",
+                                "/reissue",
+                                "/",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
@@ -107,13 +115,7 @@ public class SecurityConfig{
 
                         // 허용할 Origin을 여러 개 추가
                         configuration.setAllowedOrigins(Arrays.asList(
-                                "http://localhost:3000",
-                                "http://weather-claus-static-files.s3-website.ap-northeast-2.amazonaws.com",
-                                "https://d2gm6q97x0ibvz.cloudfront.net",
-                                "https://mungwithme.com",
-                                "http://mungwithme.com",
-                                "mungwithme.com",
-                                "d2gm6q97x0ibvz.cloudfront.net"
+                                "http://localhost:3000"
                         ));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
