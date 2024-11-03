@@ -42,8 +42,12 @@ public class JwtHandshakeInterceptor extends HttpSessionHandshakeInterceptor {
             String bearerToken = servletRequest.getHeader(HEADER_STRING);  // Authorization 헤더에서 값을 가져옴
 
             if (bearerToken == null || !bearerToken.startsWith(TOKEN_PREFIX)) {
-                response.setStatusCode(HttpStatus.BAD_REQUEST);
-                return false;  // JWT 토큰이 없거나 잘못된 경우 바로 연결 중단
+                log.info("No token found. Allowing guest access.");
+                attributes.put("username", "guest");  // 비회원 사용자로 설정
+                return true;
+
+//                response.setStatusCode(HttpStatus.BAD_REQUEST);
+//                return false;  // JWT 토큰이 없거나 잘못된 경우 바로 연결 중단
             }
 
                 token = bearerToken.substring(TOKEN_PREFIX.length());  // "Bearer " 접두사를 제거하고 토큰만 반환

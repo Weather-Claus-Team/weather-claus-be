@@ -84,7 +84,8 @@ public class SecurityConfig{
                                 "/reissue",
                                 "/",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/ws/**"
                         ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
