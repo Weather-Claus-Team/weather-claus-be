@@ -35,8 +35,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
                         , webSocketObjectMapper
                 ), "/ws")
                 .addInterceptors(new JwtHandshakeInterceptor(jwtUtil)) // JWT 인증 인터셉터
-                .setAllowedOrigins("*")
-                .withSockJS();  // SockJS 설정 추가
+                .setAllowedOrigins("*");
+//                .withSockJS();  // SockJS 설정 추가
 
     }
 }
