@@ -1,4 +1,4 @@
-package com.weatherclaus.be.user.dto;
+package com.weatherclaus.be.user.dto.response;
 
 import lombok.Data;
 

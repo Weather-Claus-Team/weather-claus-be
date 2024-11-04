@@ -1,7 +1,7 @@
 package com.weatherclaus.be.user.service;
 
 
-import com.weatherclaus.be.user.dto.RecaptchaResponse;
+import com.weatherclaus.be.user.dto.response.RecaptchaResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

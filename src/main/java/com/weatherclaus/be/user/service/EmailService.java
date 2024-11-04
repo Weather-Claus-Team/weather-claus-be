@@ -1,9 +1,11 @@
 package com.weatherclaus.be.user.service;
 
-import com.weatherclaus.be.user.dto.EmailCode;
+import com.weatherclaus.be.user.dto.request.EmailCodeRequest;
 import com.weatherclaus.be.user.exception.CodeMismatchException;
 import com.weatherclaus.be.user.exception.EmailAlreadyExistsException;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -11,7 +13,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Duration;
 import java.util.Random;
@@ -35,12 +36,6 @@ public class EmailService {
 
     // 사용자 정보를 인자로 받는 메소드로 확장
     public void sendContactEmail(String toEmail) {
-
-        if(userRepsotiroy.existsByEmail(toEmail)) {
-            throw new EmailAlreadyExistsException("email already exists");
-        }
-
-
 
         String[] to = {toEmail}; // 이메일을 받을 주소들
         String subject = "Weather Claus ! 회원가입 인증 메일입니다 ! "; // 메일 제목
@@ -81,7 +76,7 @@ public class EmailService {
      * 인증로직
      */
     @Transactional
-    public void verifyCode(EmailCode emailCode)   {
+    public void verifyCode(EmailCodeRequest emailCode)   {
 
         // Redis에서 이메일에 해당하는 인증번호 조회
         ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
@@ -89,7 +84,7 @@ public class EmailService {
 
         // Redis에 저장된 인증번호가 없는 경우
         if (storedCode == null) {
-            throw new CodeMismatchException("code mismatch");
+            throw new CodeMismatchException("code expired");
         }
 
         if (storedCode.equals(emailCode.getCode())) {
@@ -97,5 +92,19 @@ public class EmailService {
         } else {
             throw new CodeMismatchException("code mismatch");
         }
+    }
+
+    public void sendUsername(String email, String username) {
+
+        String subject = "Weather Claus ! 아이디 찾기 입니다 ! "; // 메일 제목
+        String text = email+"님 , 찾으시는 id는 "+username + "입니다"; // 이메일 본문 조합
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email); // 수신자 이메일 주소
+        message.setSubject(subject); // 메일 제목
+        message.setText(text); // 메일 내용
+        mailSender.send(message);
+
+
     }
 }
