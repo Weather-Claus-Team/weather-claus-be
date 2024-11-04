@@ -14,9 +14,12 @@
 <br/>
 
 ## 프로젝트 소개
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/87f321ae-e3e4-4686-8be3-98a7abbb29af">
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/7bdcec7e-5846-4faf-a582-eec05f4ba6b1">
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/f5d59c8e-b3cc-4b05-9f13-2134ed01950e">
 
 ## 개발 기간과 팀 웨더클로스
-2024/10/4 ~ 2024/11
+2024/10/4 ~ 2024/11 (진행중)
 
 ## 기술 스택
 	• 프로그래밍 언어 및 프레임워크
@@ -29,7 +32,7 @@
       Docker, Docker Compose
 
     • 인프라 및 클라우드 관련 서비스
-      aws ec2, route53, ELB , ECR,IAM, RDS,s3, 
+      aws ec2, route53, ELB , ECR,IAM, s3
 
     • DevOps 및 CI/CD 관련 도구
        github actions, postman, swagger
@@ -38,32 +41,47 @@
 ## 주요 기능
 
 [//]: # (이거는... 기능설명 프론트쪽 사진 있어야 될 거 같음 , )
-
+```
 회원가입("/api/users/**") -> 아이디체크,이메일인증번호발송,확인, 아이디찾기
-마이페이지("/api/profile/**") -> 내정보보기(이미지,닉네임), 수정,패스워드 확인,변경,회원탈퇴
+```
 
-날씨 보여주기("/api/weather/forecast") 
-
-웹소켓 채팅 -> 
-
-
+```
+마이페이지("/api/profile/**") -> 내정보보기(이미지,닉네임), 회원정보 수정,패스워드 확인,변경,회원탈퇴
+```
+```
+날씨 보여주기("/api/weather/forecast") -> 해당 지역의 날씨를 보여줌
+```
+```
+웹소켓 채팅("/ws","api/chatList") -> 1개의 공용채팅방으로 회원은 채팅을 할 수 있으며, 비회원은 채팅내역을 볼 수 있으나 채팅은 할 수 없음
+```
 
 
 
 
 aws 백엔드 서버 구조 
+```
+Route53(domain 별칭) -> ELB(SSL,TLS-https,80port,443port) -> EC2(80 port,EIP)
+```
 
-==Route53==(domain 별칭) -> ==ELB==(SSL,TLS-https,80port,443port) -> ==EC2==(80 port,EIP)
 
 [//]: # (aws image)
 
 
 ec2 내부 docker를 통한 빌드, docker-compose를 통한 개발환경, 배포환경 분리
 
+<img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/b86f4977-36cf-42b9-a2ad-ccd751eb4860">
 
-[//]: # (docker image)
 
 
+
+CI/CD깃허브 액션 
+
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/bf8bcb20-c458-4a4d-9f48-2fb91ca3ae3a">
+
+
+
+
+Dockerfile
 ```Dockerfile
 
 FROM openjdk:17-jdk
@@ -76,17 +94,13 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 ```
 
 
-깃헙액션. - CI/CD깃헙 액션 사진첨부 구조 등 설명
-
-[//]: # (github action image)
 
 
-시큐리티 구조 모식도 -> jwt,access,refresh토큰 -> 레디스를 쓴게 포인트.
 
-[//]: # (security logic image)
+시큐리티 구조 모식도  ( jwt,access,refresh, redis 사용 ) 
 
+<img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/0f609f68-175a-4101-8c76-86a8ff6f8932">
 
-- 코드 보여주기
 
 jpa 연관관계
 ```java
@@ -115,7 +129,7 @@ public Slice<ChatMessage> findAllChatMessages(Pageable pageable) {
     return new SliceImpl<>(content, pageable, hasNext);
 }
 ````
-rest api 설계노력..
+restful api
 ```java
 @RequestMapping("/api/profile")
 @GetMapping("/myPage")
@@ -152,9 +166,13 @@ custom validator 사용
       }
   }
 ```
-도메인별 예외 및 controllerAdivce 처리.
+도메인별 예외 및 controllerAdivce 처리
 
-[//]: # (image 첨부 )
+
+<img width="252" alt="스크린샷 2024-11-04 오전 8 52 52" src="https://github.com/user-attachments/assets/e645d775-1292-4bfb-a00f-3efe114da7fc">
+<img width="243" alt="스크린샷 2024-11-04 오전 8 53 32" src="https://github.com/user-attachments/assets/2017ae9f-2634-4fe1-961e-26ac87173fe1">
+<img width="247" alt="스크린샷 2024-11-04 오전 9 19 51" src="https://github.com/user-attachments/assets/75fe9010-9f66-41d8-895c-62aa45cdfc0d">
+
 
 
 응답 획일화
@@ -183,11 +201,9 @@ custom validator 사용
 }
 ```
 
-```
 resoureces환경 분리 - 기본yml, dev, local, prod, secret
-```java
 
-```
+<img width="338" alt="스크린샷 2024-11-04 오전 9 03 24" src="https://github.com/user-attachments/assets/f03ef4cf-c793-427e-b3f1-166235334638">
 
 
 - g-mail: 이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
@@ -198,7 +214,7 @@ resoureces환경 분리 - 기본yml, dev, local, prod, secret
 - 리캡챠: Google reCAPTCHA를 사용하여 봇을 방지합니다.
 
 
-엔티티 다이어그램.
+[//]: # ( 엔티티다이어그램 )
 
 [//]: # ( 엔티티 이미지 ? )
 
@@ -206,24 +222,20 @@ resoureces환경 분리 - 기본yml, dev, local, prod, secret
 
 
 ## 후기
-프-백 처음이지만 서로 협업을 잘 ..
+구성원들 모두 프론트와 백엔드의 협업 프로젝트는 처음이지만 서로 많이 질의하며 협업에 대해 알게된것같다.
 
-
-2명에서 1명이... 되었지만 잘 ~~ 
+원래 백엔드가 2명이었지만 1분이 나가셔서 혼자 하게되었는데. 혼자 정해진 기간내에 프로젝트를 완성해야되다 보니까 많이 걱정되고 불안했지만 
+무사히 끝낼수 있어서 기쁘다.
 
 같이 프로젝트를 진행하면서 프론트와 백의 통신방법, restApi설계 , 소통과 협업의 방식,
 커뮤니케이션 능력, 팀워크,동기부여 등 토론,협의 방법에 대해 많이 배운것같다. 
 
 프론트의 작업진행 방식에 대해서도 알게되어 좋았다
 
-
-
-
 또한 백엔드 개발자로서 혼자 개인 프로젝트를 할 때 보지 못했던 것들(CORS,DTO 반환 등 )
 에 대해 고민해볼 시간을 갖게 되었고 부족한 부분에 대해서 다시 공부해볼 수 있었다.  
 
 혼자 진행하다보니 나의 페이스에 맞게 필요한 기술들에 대해 공부 할 수 있었지만 다른 백엔드 개발자와 피드백? 코드리뷰같은걸 할 수 없어서 아쉬웠다. 
 
-백엔드 개발자 혼자 정해진 기간내에 프로젝트를 완성해야되다 보니까 많이 걱정되고 불안했지만 
-무사히 끝낼수 있어서 기쁘다.
+
 
