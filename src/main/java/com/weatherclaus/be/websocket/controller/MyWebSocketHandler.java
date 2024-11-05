@@ -38,47 +38,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         CLIENTS.put(session.getId(), session);
-
-        // 세션에서 토큰을 확인하여 사용자 인증
-        String token = (String) session.getAttributes().get("token");
-        log.info("Token: {}", token);
-        if (token != null) {
-            try {
-                jwtUtil.isExpired(token);
-
-                if ("access".equals(jwtUtil.getCategory(token))) {
-                    String username = jwtUtil.getUsername(token);
-                    session.getAttributes().put("username", username);
-                    log.info("User {} connected successfully.", username);
-                } else {
-                    handleGuest(session);
-                }
-            } catch (ExpiredJwtException e) {
-                log.warn("Expired token provided on connection. Requesting re-authentication.");
-
-                // 토큰 만료 알림 전송
-                String renewalMessage = objectMapper.writeValueAsString(Map.of(
-                        "type", "TOKEN_EXPIRED",
-                        "message", "Your session has expired. Please renew your token."
-                ));
-                session.sendMessage(new TextMessage(renewalMessage));
-
-                // 게스트 상태로 설정
-                session.getAttributes().put("username", "guest");
-            }
-        } else {
-            // 토큰 없이 접속한 경우 게스트로 설정
-            handleGuest(session);
-        }
-    }
-
-    private void handleGuest(WebSocketSession session) throws IOException {
-        session.getAttributes().put("username", "guest");
-        String guestMessage = objectMapper.writeValueAsString(Map.of(
-                "type", "GUEST_ACCESS",
-                "message", "You are participating as a guest. Please log in to send messages."
-        ));
-        session.sendMessage(new TextMessage(guestMessage));
     }
 
     @Override

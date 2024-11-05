@@ -22,6 +22,9 @@ public class JWTUtil {
     @Value("${JWT_REFRESH_EXPIREDMS}")
     private Long refreshTokenExpiredMs;
 
+    @Value("${JWT_SECOND_EXPIREDMS}")
+    private Long secondTokenExpiredMs;
+
     private SecretKey secretKey;
 
 
@@ -86,6 +89,17 @@ public class JWTUtil {
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + refreshTokenExpiredMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public String createSecondJwt(String username) {
+
+        return Jwts.builder()
+                .claim("category", "second")
+                .claim("username", username)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + secondTokenExpiredMs))
                 .signWith(secretKey)
                 .compact();
     }

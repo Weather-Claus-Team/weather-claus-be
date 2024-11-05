@@ -40,7 +40,8 @@ public class JWTFilter extends OncePerRequestFilter {
             "/reissue",
             "/swagger-ui",
             "/v3/api-docs",
-            "/ws"
+            "/ws",
+            "/api/st"
     );
 
 
