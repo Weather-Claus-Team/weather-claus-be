@@ -32,9 +32,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new MyWebSocketHandler(chatService
-                        , webSocketObjectMapper
+                        , webSocketObjectMapper,jwtUtil
                 ), "/ws")
-                .addInterceptors(new JwtHandshakeInterceptor(jwtUtil)) // JWT 인증 인터셉터
+//                .addInterceptors(new JwtHandshakeInterceptor(jwtUtil)) // JWT 인증 인터셉터
                 .setAllowedOrigins("*");
 //                .withSockJS();  // SockJS 설정 추가
 

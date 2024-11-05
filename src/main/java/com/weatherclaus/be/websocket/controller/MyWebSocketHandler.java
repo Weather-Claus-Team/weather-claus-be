@@ -1,8 +1,10 @@
 package com.weatherclaus.be.websocket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weatherclaus.be.jwt.JWTUtil;
 import com.weatherclaus.be.websocket.dto.ChatListResponse;
 import com.weatherclaus.be.websocket.service.ChatService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -21,12 +23,14 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     private ObjectMapper objectMapper;
 
     private final ChatService chatService;
+    private final JWTUtil jwtUtil;
 
     public MyWebSocketHandler(ChatService chatService
-            , ObjectMapper objectMapper
+            , ObjectMapper objectMapper,JWTUtil jwtUtil
     ) {
         this.chatService = chatService;
         this.objectMapper = objectMapper;
+        this.jwtUtil = jwtUtil;
     }
 
 
@@ -35,9 +39,46 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
 
         CLIENTS.put(session.getId(), session);
 
-//        String username = (String) session.getAttributes().get("username");
-//        log.info("User " + username + " connected.");
-//        // 연결 성공 시, 특정 사용자 정보를 기반으로 세션을 관리
+        // 세션에서 토큰을 확인하여 사용자 인증
+        String token = (String) session.getAttributes().get("token");
+        log.info("Token: {}", token);
+        if (token != null) {
+            try {
+                jwtUtil.isExpired(token);
+
+                if ("access".equals(jwtUtil.getCategory(token))) {
+                    String username = jwtUtil.getUsername(token);
+                    session.getAttributes().put("username", username);
+                    log.info("User {} connected successfully.", username);
+                } else {
+                    handleGuest(session);
+                }
+            } catch (ExpiredJwtException e) {
+                log.warn("Expired token provided on connection. Requesting re-authentication.");
+
+                // 토큰 만료 알림 전송
+                String renewalMessage = objectMapper.writeValueAsString(Map.of(
+                        "type", "TOKEN_EXPIRED",
+                        "message", "Your session has expired. Please renew your token."
+                ));
+                session.sendMessage(new TextMessage(renewalMessage));
+
+                // 게스트 상태로 설정
+                session.getAttributes().put("username", "guest");
+            }
+        } else {
+            // 토큰 없이 접속한 경우 게스트로 설정
+            handleGuest(session);
+        }
+    }
+
+    private void handleGuest(WebSocketSession session) throws IOException {
+        session.getAttributes().put("username", "guest");
+        String guestMessage = objectMapper.writeValueAsString(Map.of(
+                "type", "GUEST_ACCESS",
+                "message", "You are participating as a guest. Please log in to send messages."
+        ));
+        session.sendMessage(new TextMessage(guestMessage));
     }
 
     @Override
