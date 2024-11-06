@@ -117,7 +117,8 @@ public class SecurityConfig{
 
                         // 허용할 Origin을 여러 개 추가
                         configuration.setAllowedOrigins(Arrays.asList(
-                                "http://localhost:3000"
+                                "http://localhost:3000",
+                                "https://weather-claus.netlify.app"
                         ));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
