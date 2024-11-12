@@ -119,6 +119,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private void setResponseTokens(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setHeader("Authorization", "Bearer " + accessToken); // "Bearer " +
         response.addCookie(jwtUtil.createCookie("refresh", refreshToken));
+        response.addHeader("Set-Cookie", "refresh=" + refreshToken + "; Path=/; HttpOnly; Secure; SameSite=None");
         response.setStatus(HttpStatus.OK.value());
     }
 
