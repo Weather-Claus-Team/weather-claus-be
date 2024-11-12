@@ -109,7 +109,7 @@ public class JWTUtil {
         cookie.setMaxAge((int)(refreshTokenExpiredMs / 1000));  // 밀리초를 초로 변환
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
 
         return cookie;
     }
