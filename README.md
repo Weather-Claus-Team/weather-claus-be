@@ -23,25 +23,25 @@
 웨더클로스 팀 repository : [weather-claus-teamRepository](https://github.com/Weather-Claus-Team)
 <br>
 <br>
-## 팀 웨더클로스 BE
 
-
-| <img src="" width="150"> |
-|:--------------------------------------------------------:|
-|        [HyungGeun](https://github.com/HyungGeun94)         |
-|                            BE                            |
 
 ## 프로젝트 소개
 
 
 
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/c3e1dc03-6ae7-4375-8628-0d68ac6a4b24">
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/ce623d57-798d-4e45-b8f3-e69c9cbddb05">
+<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/1e9d29c2-88f0-4364-9169-9e51241bb261">
 
-<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/87f321ae-e3e4-4686-8be3-98a7abbb29af">
-<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/7bdcec7e-5846-4faf-a582-eec05f4ba6b1">
-<img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/f5d59c8e-b3cc-4b05-9f13-2134ed01950e">
-
-## 개발 기간과 팀 웨더클로스
+## 개발 기간
 2024/10/4 ~ 2024/11/13 (6주)
+
+## 팀 웨더클로스 BE
+
+| <img src="https://github.com/user-attachments/assets/984d3041-b787-4da3-b07e-f2132411193e" width="150"> |
+|:--------------------------------------------------------:|
+|        [HyungGeun](https://github.com/HyungGeun94)         |
+|                            BE                            |
 
 ## 기술 스택
 	• 프로그래밍 언어 및 프레임워크
