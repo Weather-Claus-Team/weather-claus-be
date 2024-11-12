@@ -85,8 +85,18 @@ public class ReissueController {
 
         //response
         response.setHeader("Authorization", "Bearer "+ newAccess); // "Bearer "+
-        response.addCookie(jwtUtil.createCookie("refresh", newRefresh));
-        response.addHeader("Set-Cookie", "refresh=" + newRefresh + "; Path=/; HttpOnly; Secure; SameSite=None");
+
+        // 만료 시간 (초 단위)
+        int maxAge = (int)(86400000 / 1000);
+
+        // Set-Cookie 헤더를 사용하여 모든 쿠키 속성 수동 설정
+        String cookieHeader = "refresh=" + newRefresh
+                + "; Max-Age=" + maxAge
+                + "; Path=/; HttpOnly; Secure; SameSite=None";
+        response.addHeader("Set-Cookie", cookieHeader);
+
+//        response.addCookie(jwtUtil.createCookie("refresh", newRefresh));
+//        response.addHeader("Set-Cookie", "refresh=" + newRefresh + "; Path=/; HttpOnly; Secure; SameSite=None");
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
