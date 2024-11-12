@@ -1,21 +1,38 @@
 
 <h1 align="center">
   <br>
-  <img src="https://github.com/user-attachments/assets/2b35db18-e259-48fc-8a40-239f664dab8b" alt="WC logo" width="200">
+  <img src="https://github.com/user-attachments/assets/d971e139-2f93-463b-8eba-e7fc7c5a71da" alt="WC logo" width="200">
   <p>
   Weather Claus
   <p>
 </h1>
 
-<h4 align="center">날씨가 어려운 웨더즈들을 위한 사이트, 웨더 클로스입니다</h4>
+<h4 align="center">날씨가 어려운 이들을 위한 사이트, 웨더 클로스입니다</h4>
+
 
 <!-- 이미지 추가 예정 (gif 등) -->
 
 <br/>
 
+► 해당 readme는 웨더 클로스 프로젝트 ${\textsf{\color{LightSalmon}백엔드(BE)}}$ readme 입니다 (팀 readme는 아래 참고 부탁드립니다)
+<br>
+## 프로젝트 소개
+웨더클로스 사이트 : [weather-claus](https://weather-claus.netlify.app)
+
+
+웨더클로스 팀 repository : [weather-claus-teamRepository](https://github.com/Weather-Claus-Team)
+<br>
+<br>
+## 팀 웨더클로스 BE
+
+
+| <img src="" width="150"> |
+|:--------------------------------------------------------:|
+|        [HyungGeun](https://github.com/HyungGeun94)         |
+|                            BE                            |
+
 ## 프로젝트 소개
 
-https://weather-claus.netlify.app
 
 
 
@@ -24,7 +41,7 @@ https://weather-claus.netlify.app
 <img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/f5d59c8e-b3cc-4b05-9f13-2134ed01950e">
 
 ## 개발 기간과 팀 웨더클로스
-2024/10/4 ~ 2024/11 (진행중)
+2024/10/4 ~ 2024/11/13 (6주)
 
 ## 기술 스택
 	• 프로그래밍 언어 및 프레임워크
