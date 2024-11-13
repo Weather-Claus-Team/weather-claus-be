@@ -10,22 +10,20 @@
 <h4 align="center">날씨가 어려운 이들을 위한 사이트, 웨더 클로스입니다</h4>
 
 
-<!-- 이미지 추가 예정 (gif 등) -->
-
 <br/>
 
 ► 해당 readme는 웨더 클로스 프로젝트 ${\textsf{\color{LightSalmon}백엔드(BE)}}$ readme 입니다 (팀 readme는 아래 참고 부탁드립니다)
 <br>
-## 프로젝트 소개
-웨더클로스 사이트 : [weather-claus](https://weather-claus.netlify.app)
+## 프로젝트 주소
+웨더클로스 웹 : [weather-claus-web](https://weather-claus.netlify.app)
 
 
-웨더클로스 팀 repository : [weather-claus-teamRepository](https://github.com/Weather-Claus-Team)
+웨더클로스 팀  : [weather-claus-team](https://github.com/Weather-Claus-Team)
 <br>
 <br>
 
 
-## 프로젝트 소개
+## 프로젝트 이미지
 
 
 
@@ -33,7 +31,9 @@
 <img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/ce623d57-798d-4e45-b8f3-e69c9cbddb05">
 <img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/1e9d29c2-88f0-4364-9169-9e51241bb261">
 
-## 개발 기간
+[//]: # (회원가입 쪽도 수정되면 추가하기.. )
+
+## 개발 기간 
 2024/10/4 ~ 2024/11/13 (6주)
 
 ## 팀 웨더클로스 BE
@@ -48,21 +48,23 @@
       Java 17, Spring 3.3.4
 
 	• 데이터베이스 
-      mysql 8.0.32,redis
+      mysql 8.0.32, redis
 
 	• 도커 및 컨테이너화
       Docker, Docker Compose
 
     • 인프라 및 클라우드 관련 서비스
-      aws ec2, route53, ELB , ECR,IAM, s3
+      aws ec2, route53, ELB, ECR, IAM, S3
 
     • DevOps 및 CI/CD 관련 도구
        github actions, postman, swagger
 
+    • 협업 및 개발 도구 
+       github, notion, discord, intelliJ
 
 ## 주요 기능
 
-[//]: # (이거는... 기능설명 프론트쪽 사진 있어야 될 거 같음 , )
+[//]: # (이거는... 기능설명 프론트쪽 사진 있어야 될 거 같음 )
 ```
 회원가입("/api/users/**") -> 아이디체크,이메일인증번호발송,확인, 아이디찾기
 ```
@@ -71,10 +73,12 @@
 마이페이지("/api/profile/**") -> 내정보보기(이미지,닉네임), 회원정보 수정,패스워드 확인,변경,회원탈퇴
 ```
 ```
-날씨 보여주기("/api/weather/forecast") -> 해당 지역의 날씨를 보여줌
+날씨 보여주기("/api/weather/forecast") -> 해당 지역의 날씨를 보여줍니다.
 ```
 ```
-웹소켓 채팅("/ws","api/chatList") -> 1개의 공용채팅방으로 회원은 채팅을 할 수 있으며, 비회원은 채팅내역을 볼 수 있으나 채팅은 할 수 없음
+웹소켓 채팅("/ws","api/chatList") -> 
+1개의 공용채팅방으로 회원은 채팅을 할 수 있으며, 
+비회원은 채팅에 연결되어 있지만 실시간 채팅은 할 수 없습니다.
 ```
 
 
@@ -85,18 +89,18 @@ aws 백엔드 서버 구조
 Route53(domain 별칭) -> ELB(SSL,TLS-https,80port,443port) -> EC2(80 port,EIP)
 ```
 
+[//]: # (elb - ec2 이미지 첨부 배경화면에 있음 )
 
-[//]: # (aws image)
 
 
-ec2 내부 docker를 통한 빌드, docker-compose를 통한 개발환경, 배포환경 분리
+ec2 내부 docker-compose 구조
 
 <img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/b86f4977-36cf-42b9-a2ad-ccd751eb4860">
 
 
 
 
-CI/CD깃허브 액션 
+CI/CD -> 깃허브 액션 
 
 <img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/bf8bcb20-c458-4a4d-9f48-2fb91ca3ae3a">
 
@@ -105,14 +109,11 @@ CI/CD깃허브 액션
 
 Dockerfile
 ```Dockerfile
-
 FROM openjdk:17-jdk
 
 COPY build/libs/*SNAPSHOT.jar /app.jar
 
 ENTRYPOINT ["java","-jar","/app.jar"]
-
-
 ```
 
 
@@ -122,6 +123,8 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 시큐리티 구조 모식도  ( jwt,access,refresh, redis 사용 ) 
 
 <img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/0f609f68-175a-4101-8c76-86a8ff6f8932">
+
+[//]: # (하나 더 추가 배경화면에 있음 -> 실행 모식도.)
 
 
 jpa 연관관계
@@ -154,6 +157,7 @@ public Slice<ChatMessage> findAllChatMessages(Pageable pageable) {
 restful api
 ```java
 @RequestMapping("/api/profile")
+
 @GetMapping("/myPage")
 @PatchMapping("/myPage")
 @PostMapping("/password")
@@ -174,8 +178,13 @@ ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
 // 지오코딩 사용시 도시이름 위경도 캐시로 저장
 @Cacheable(value = "cityCache", key = "#city")
 public LatLonDTO getLatLon(String city) throws JsonProcessingException {
+    
+    //날씨정보 캐싱
+    @Cacheable(value = "weatherCache", key = "#cacheKey")
+    public WeatherResponse getWeather(String cacheKey, double lat, double lon) throws JsonProcessingException {
+}
 ```
-custom validator 사용
+custom validator 및 dto validation 사용
 ```
 @Override
   public void validate(Object target, Errors errors) {
@@ -203,7 +212,7 @@ custom validator 사용
 {
     "status": "success",
     "message": "Email sent successfully",
-    "data": null,
+    "data": null, ( data가 있을시 객체 전달 )
     "errorDetails": null,
     "code": 200
 }
@@ -223,11 +232,25 @@ custom validator 사용
 }
 ```
 
-resoureces환경 분리 - 기본yml, dev, local, prod, secret
+개발과 배포 환경 분리 
+
+- application.yml -> local, dev, prod, secret
+
 
 <img width="338" alt="스크린샷 2024-11-04 오전 9 03 24" src="https://github.com/user-attachments/assets/f03ef4cf-c793-427e-b3f1-166235334638">
 
+- docker-compose.yml -> local, dev, prod
 
+[//]: # (이미지 추가하기 !! 배경화면에 냅둬놨음)
+
+
+<br>
+<br>
+<br>
+<br>
+의존성 및 기타
+
+jwt s3이미지 업로드, 불러오기 ,weatherapi-geocoding
 - g-mail: 이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
 - s3: AWS S3를 사용하여 파일을 저장하고 관리합니다.
 - weathermap api 사용: 외부 API를 사용하여 날씨 정보를 가져옵니다.
@@ -236,9 +259,6 @@ resoureces환경 분리 - 기본yml, dev, local, prod, secret
 - 리캡챠: Google reCAPTCHA를 사용하여 봇을 방지합니다.
 
 
-[//]: # ( 엔티티다이어그램 )
-
-[//]: # ( 엔티티 이미지 ? )
 
 
 
