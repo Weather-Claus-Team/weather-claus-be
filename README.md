@@ -84,7 +84,7 @@
 
 
 
-## aws 백엔드 서버 구조 
+## AWS 백엔드 서버 구조 
 ```
 Route53(domain 별칭) -> ELB(SSL,TLS-https,80port,443port) -> EC2(80 port,EIP)
 ```
@@ -121,7 +121,7 @@ CI/CD -> 깃허브 액션
 <img width="500" height="300" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/0f609f68-175a-4101-8c76-86a8ff6f8932">
 
 
-# 주요 기능 상세 코드
+# 주요 기능 일부 상세 코드
 
 ## querydsl ( 채팅 목록 )
 ````java
@@ -188,7 +188,7 @@ public class ChatMessage {
 @DeleteMapping()
 ```
 
-## custom validator 및 dto validation 사용
+## custom validator 및 validation 사용
 ```
 @Override
   public void validate(Object target, Errors errors) {
@@ -243,47 +243,82 @@ public class ChatMessage {
 
 <img width="338" alt="스크린샷 2024-11-04 오전 9 03 24" src="https://github.com/user-attachments/assets/f03ef4cf-c793-427e-b3f1-166235334638">
 
-- docker-compose.yml -> local, dev, prod
+- docker-compose.yml ->  dev, prod
+
+
 <img width="338" alt="스크린샷 2024-11-13 오전 9 06 54" src="https://github.com/user-attachments/assets/f3eb4159-c951-4662-9ad8-76f11f85f66d">
 
 
-[//]: # (이미지 추가하기 !! 배경화면에 냅둬놨음)
+<br>
+<br>
+<br>
+<br>
 
-
-<br>
-<br>
-<br>
-<br>
 ## 의존성 및 기타
 
-jwt s3이미지 업로드, 불러오기 ,weatherapi-geocoding
-- g-mail: 이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
-- s3: AWS S3를 사용하여 파일을 저장하고 관리합니다.
-- weathermap api 사용: 외부 API를 사용하여 날씨 정보를 가져옵니다.
-- 캐시, 지오코딩: RedisTemplate과 ObjectMapper를 사용하여 JSON 데이터를 객체로 변환하고 캐시합니다.
-- web-socket: 웹소켓을 사용하여 실시간 통신을 구현합니다. 페이징(무한스크롤 슬라이싱)과 QueryDSL을 사용하여 데이터를 효율적으로 조회합니다.
-- 리캡챠: Google reCAPTCHA를 사용하여 봇을 방지합니다.
+- Jwt ->  로그인 시 생성,발급하고 사용자의 인증,인가 작업에 사용합니다.
+- Spring-security -> 인증과 권한을 관리합니다.
+<br>
+<br>
+- QueryDSL -> JPA를 사용할 때 동적 쿼리를 작성하고 실행합니다.
+- web-socket ->  TextWebSocketHandler 구현한 웹소켓을 사용하여 실시간 통신을 구현합니다. <br>
+  QueryDSL을 사용하여 페이징(무한스크롤 슬라이싱) 데이터를 효율적으로 조회합니다.
+- Redis -> 캐시를 사용하여 데이터를 저장하고 조회합니다.
+<br>
+<br>
+- S3 -> 사용자가 올리는 이미지를 업로드하고 불러옵니다. 
+- g-mail ->  이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
+<br>
+<br>
+- openWeatherMap API -> 외부 api를 사용하여 날씨 정보를 가져옵니다.
+- cache : RedisTemplate과 ObjectMapper를 사용하여 JSON 데이터를 객체로 변환하고 캐시합니다.
+<br>
+<br>
 
 
 
 
 
 
-# 후기
-구성원들 모두 프론트와 백엔드의 협업 프로젝트는 처음이지만 서로 많이 질의하며 협업에 대해 알게된것같다.
 
-원래 백엔드가 2명이었지만 1분이 나가셔서 혼자 하게되었는데. 혼자 정해진 기간내에 프로젝트를 완성해야되다 보니까 많이 걱정되고 불안했지만 
-무사히 끝낼수 있어서 기쁘다.
+## 추가로 구현하고 싶은 부분
 
-같이 프로젝트를 진행하면서 프론트와 백의 통신방법, restApi설계 , 소통과 협업의 방식,
-커뮤니케이션 능력, 팀워크,동기부여 등 토론,협의 방법에 대해 많이 배운것같다. 
+- 소셜로그인 : 카카오,네이버,구글,애플 로그인 등 편리하게 회원가입합니다.
 
-프론트의 작업진행 방식에 대해서도 알게되어 좋았다
+- 웹소켓 업그레이드 : 채팅방을 개별로 생성하고, 채팅방을 나가거나 생성할 수 있습니다.
 
-또한 백엔드 개발자로서 혼자 개인 프로젝트를 할 때 보지 못했던 것들(CORS,DTO 반환 등 )
+- 리캡챠 : Google reCAPTCHA를 사용하여 봇을 방지합니다.
+
+
+
+
+
+# 후기 
+(형근)
+
+구성원들이 협업 프로젝트에 익숙하지 않지만 서로 질의응답하며 프론트와 백에 대해 더 알게된것같다.
+
+<br>
+프론트쪽으로는 통신방법 ,restapi설계 ,소통과 협업 ,문제해결 능력, 팀워크,동기부여 , 프론트의 작업 진행방식에 대해 알게 되었고,
+
+<br>
+<br>
+
+백엔드 개발자로서는 혼자 개인 프로젝트를 할 때 보지 못했던 것들(CORS,DTO 반환,예외처리 등)
 에 대해 고민해볼 시간을 갖게 되었고 부족한 부분에 대해서 다시 공부해볼 수 있었다.  
 
-혼자 진행하다보니 나의 페이스에 맞게 필요한 기술들에 대해 공부 할 수 있었지만 다른 백엔드 개발자와 피드백? 코드리뷰같은걸 할 수 없어서 아쉬웠다. 
+<br>
+<br>
 
+원래 백엔드가 2명이었지만 한명이 나가서 혼자 진행 하게되었는데, 
+<br>
+
+나의 페이스에 맞게 필요한 기술들에 대해 공부 할 수 있었지만
+<br>
+
+다른 백엔드 개발자와 더 깊은 얘기를 해볼수 있는 상호작용, 코드리뷰를 할 수 없어서 아쉬웠다.
+
+<br>
+정해진 기간내에 프로젝트를 완성해야 하고 결과물도 내야하는 부분에서 많이 걱정되고 불안했지만 무사히 팀원들과 프로젝트를 끝낼수 있어서 기쁘다 !
 
 
