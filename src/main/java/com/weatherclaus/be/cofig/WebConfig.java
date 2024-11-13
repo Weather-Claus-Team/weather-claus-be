@@ -10,12 +10,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000"
+                .allowedOrigins(
+                        "http://localhost:3000",
+                        "https://weather-claus.netlify.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true)
-                .exposedHeaders("Set-Cookie");  // Set-Cookie 노출 허용
+                .exposedHeaders("Authorization", "Set-Cookie");  // Authorization 및 Set-Cookie 노출 허용
 
     }
 }

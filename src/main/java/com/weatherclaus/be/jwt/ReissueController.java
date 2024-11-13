@@ -85,7 +85,23 @@ public class ReissueController {
 
         //response
         response.setHeader("Authorization", "Bearer "+ newAccess); // "Bearer "+
-        response.addCookie(jwtUtil.createCookie("refresh", newRefresh));
+
+        // 만료 시간 (초 단위)
+        int maxAge = (int)(86400000 / 1000);
+
+        // Set-Cookie 헤더를 사용하여 쿠키 속성 설정
+        String cookieHeader = "refresh=" + newRefresh
+                + "; Max-Age=" + maxAge
+                + "; Path=/"
+//                + "; Domain=api.mungwithme.com"  // **백엔드 도메인으로 설정**
+                + "; HttpOnly"                   // 클라이언트에서 접근 불가 (보안)
+                + "; Secure"                     // HTTPS에서만 쿠키 전송
+                + "; SameSite=None";             // 크로스 도메인에서 쿠키 전송 허용
+        response.addHeader("Set-Cookie", cookieHeader);
+
+//        response.addCookie(jwtUtil.createCookie("refresh", newRefresh));
+//        response.addHeader("Set-Cookie", "refresh=" + newRefresh + "; Path=/; HttpOnly; Secure; SameSite=None");
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

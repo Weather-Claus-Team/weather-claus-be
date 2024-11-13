@@ -85,7 +85,8 @@ public class SecurityConfig{
                                 "/",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/ws/**"
+                                "/ws/**",
+                                "/api/st"
                         ).permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
@@ -116,14 +117,16 @@ public class SecurityConfig{
 
                         // 허용할 Origin을 여러 개 추가
                         configuration.setAllowedOrigins(Arrays.asList(
-                                "http://localhost:3000"
+                                "http://localhost:3000",
+                                "https://weather-claus.netlify.app"
                         ));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+//                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                        configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie"));
 
                         return configuration;
                     }

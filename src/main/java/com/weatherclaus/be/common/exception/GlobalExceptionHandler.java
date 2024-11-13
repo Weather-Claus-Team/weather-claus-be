@@ -15,7 +15,6 @@ public class GlobalExceptionHandler {
 
 
 
-
     // IllegalArgumentException 처리
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseDto<?>> handleIllegalArgumentException(IllegalArgumentException e) {
