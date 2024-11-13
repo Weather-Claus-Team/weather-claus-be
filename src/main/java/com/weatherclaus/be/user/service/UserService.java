@@ -39,7 +39,7 @@ public class UserService {
     public void registerUser(JoinRequest joinRequest) {
 
 
-//        recaptchaCheck(joinDTO.getToken());
+        recaptchaCheck(joinRequest.getToken());
         checkEmailDuplicate(joinRequest.getEmail());
         usernameDuplicateCheck(joinRequest.getUsername());
 
@@ -51,11 +51,8 @@ public class UserService {
 
     private void recaptchaCheck(String token) {
 
-        boolean isHuman = recaptchaService.verifyRecaptcha(token);
+        recaptchaService.verifyRecaptcha(token);
 
-        if (!isHuman) {
-            throw new RecaptchaTokenInvalidException("invalid recaptcha token");
-        }
     }
 
 

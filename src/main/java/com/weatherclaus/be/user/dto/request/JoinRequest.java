@@ -26,5 +26,5 @@ public class JoinRequest {
     @Size(min = 6)
     private String password2;
 
-//    private String token;
+    private String token;
 }
