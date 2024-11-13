@@ -260,16 +260,22 @@ public class ChatMessage {
 - Spring-security -> 인증과 권한을 관리합니다.
 <br>
 <br>
+
+
 - QueryDSL -> JPA를 사용할 때 동적 쿼리를 작성하고 실행합니다.
 - web-socket ->  TextWebSocketHandler 구현한 웹소켓을 사용하여 실시간 통신을 구현합니다. <br>
   QueryDSL을 사용하여 페이징(무한스크롤 슬라이싱) 데이터를 효율적으로 조회합니다.
 - Redis -> 캐시를 사용하여 데이터를 저장하고 조회합니다.
 <br>
 <br>
+
+
 - S3 -> 사용자가 올리는 이미지를 업로드하고 불러옵니다. 
 - g-mail ->  이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
 <br>
 <br>
+
+
 - openWeatherMap API -> 외부 api를 사용하여 날씨 정보를 가져옵니다.
 - cache : RedisTemplate과 ObjectMapper를 사용하여 JSON 데이터를 객체로 변환하고 캐시합니다.
 <br>
