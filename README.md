@@ -23,7 +23,7 @@
 <br>
 
 
-## 프로젝트 이미지
+# 프로젝트 이미지
 
 
 
@@ -33,17 +33,17 @@
 
 [//]: # (회원가입 쪽도 수정되면 추가하기.. )
 
-## 개발 기간 
+# 개발 기간 
 2024/10/4 ~ 2024/11/13 (6주)
 
-## 팀 웨더클로스 BE
+# 팀 웨더클로스 BE
 
 | <img src="https://github.com/user-attachments/assets/984d3041-b787-4da3-b07e-f2132411193e" width="150"> |
 |:--------------------------------------------------------:|
 |        [HyungGeun](https://github.com/HyungGeun94)         |
 |                            BE                            |
 
-## 기술 스택
+# 기술 스택
 	• 프로그래밍 언어 및 프레임워크
       Java 17, Spring 3.3.4
 
@@ -62,7 +62,7 @@
     • 협업 및 개발 도구 
        github, notion, discord, intelliJ
 
-## 주요 기능
+# 주요 기능
 
 [//]: # (이거는... 기능설명 프론트쪽 사진 있어야 될 거 같음 )
 ```
@@ -84,58 +84,48 @@
 
 
 
-aws 백엔드 서버 구조 
+## aws 백엔드 서버 구조 
 ```
 Route53(domain 별칭) -> ELB(SSL,TLS-https,80port,443port) -> EC2(80 port,EIP)
 ```
 
-[//]: # (elb - ec2 이미지 첨부 배경화면에 있음 )
+
+<img width="500" height="300" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/fd70cfa2-2682-48f3-96d6-c2e3089c90c9">
 
 
 
+```
 ec2 내부 docker-compose 구조
-
+```
 <img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/b86f4977-36cf-42b9-a2ad-ccd751eb4860">
 
 
 
-
+```
 CI/CD -> 깃허브 액션 
-
+```
 <img width="500" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/bf8bcb20-c458-4a4d-9f48-2fb91ca3ae3a">
 
 
 
 
-Dockerfile
-```Dockerfile
-FROM openjdk:17-jdk
 
-COPY build/libs/*SNAPSHOT.jar /app.jar
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+
 ```
-
-
-
-
-
 시큐리티 구조 모식도  ( jwt,access,refresh, redis 사용 ) 
-
-<img width="700" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/0f609f68-175a-4101-8c76-86a8ff6f8932">
-
-[//]: # (하나 더 추가 배경화면에 있음 -> 실행 모식도.)
-
-
-jpa 연관관계
-```java
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id")
-private User user;
 ```
-querydsl ( 채팅 목록 )
+
+<img width="500" height="300" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/f9fc0924-bfa5-4018-a193-c4bc3f724db7">
+
+<img width="500" height="300" alt="스크린샷 2024-10-11 오전 8 00 09" src="https://github.com/user-attachments/assets/0f609f68-175a-4101-8c76-86a8ff6f8932">
+
+
+# 주요 기능 상세 코드
+
+## querydsl ( 채팅 목록 )
 ````java
-    @Override
+@Override
 public Slice<ChatMessage> findAllChatMessages(Pageable pageable) {
 
     List<ChatMessage> content = queryFactory.select(chatMessage)
@@ -154,18 +144,10 @@ public Slice<ChatMessage> findAllChatMessages(Pageable pageable) {
     return new SliceImpl<>(content, pageable, hasNext);
 }
 ````
-restful api
-```java
-@RequestMapping("/api/profile")
 
-@GetMapping("/myPage")
-@PatchMapping("/myPage")
-@PostMapping("/password")
-@DeleteMapping()
-```
-redis -> 캐시 사용 @Cacheable
+## redis -> 캐시 사용 @Cacheable
 ```java
-//refresh 토큰 발급,재발급 경우 레디스에 저장 
+// refresh 토큰 발급,재발급 경우 레디스에 저장 
 private void storeRefreshTokenInRedis(String username, String refreshToken) {
     redisTemplate.opsForValue().set(username, refreshToken, jwtUtil.getRefreshTokenExpiredMs(), TimeUnit.MILLISECONDS);
 }
@@ -177,14 +159,36 @@ ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
 
 // 지오코딩 사용시 도시이름 위경도 캐시로 저장
 @Cacheable(value = "cityCache", key = "#city")
-public LatLonDTO getLatLon(String city) throws JsonProcessingException {
+public LatLonDTO getLatLon(String city) throws JsonProcessingException {}
     
-    //날씨정보 캐싱
-    @Cacheable(value = "weatherCache", key = "#cacheKey")
-    public WeatherResponse getWeather(String cacheKey, double lat, double lon) throws JsonProcessingException {
+// 날씨정보 캐싱
+@Cacheable(value = "weatherCache", key = "#cacheKey")
+    public WeatherResponse getWeather(String cacheKey, double lat, double lon) throws JsonProcessingException {}
+```
+
+## jpa 연관관계 
+```java
+// 채팅과 유저는 다대일 관계 (단방향)
+public class ChatMessage {
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
+
 }
 ```
-custom validator 및 dto validation 사용
+
+## restful api
+```java
+@RequestMapping("/api/profile")
+
+@GetMapping("/myPage")
+@PatchMapping("/myPage")
+@PostMapping("/password")
+@DeleteMapping()
+```
+
+## custom validator 및 dto validation 사용
 ```
 @Override
   public void validate(Object target, Errors errors) {
@@ -197,7 +201,7 @@ custom validator 및 dto validation 사용
       }
   }
 ```
-도메인별 예외 및 controllerAdivce 처리
+## 도메인별 예외 및 controllerAdivce 처리
 
 
 <img width="252" alt="스크린샷 2024-11-04 오전 8 52 52" src="https://github.com/user-attachments/assets/e645d775-1292-4bfb-a00f-3efe114da7fc">
@@ -206,7 +210,7 @@ custom validator 및 dto validation 사용
 
 
 
-응답 획일화
+## 응답 획일화
 ```json
 //성공
 {
@@ -232,7 +236,7 @@ custom validator 및 dto validation 사용
 }
 ```
 
-개발과 배포 환경 분리 
+## 개발과 배포 환경 분리 
 
 - application.yml -> local, dev, prod, secret
 
@@ -240,6 +244,8 @@ custom validator 및 dto validation 사용
 <img width="338" alt="스크린샷 2024-11-04 오전 9 03 24" src="https://github.com/user-attachments/assets/f03ef4cf-c793-427e-b3f1-166235334638">
 
 - docker-compose.yml -> local, dev, prod
+<img width="338" alt="스크린샷 2024-11-13 오전 9 06 54" src="https://github.com/user-attachments/assets/f3eb4159-c951-4662-9ad8-76f11f85f66d">
+
 
 [//]: # (이미지 추가하기 !! 배경화면에 냅둬놨음)
 
@@ -248,7 +254,7 @@ custom validator 및 dto validation 사용
 <br>
 <br>
 <br>
-의존성 및 기타
+## 의존성 및 기타
 
 jwt s3이미지 업로드, 불러오기 ,weatherapi-geocoding
 - g-mail: 이메일 서비스를 사용하여 인증 및 알림을 보냅니다.
@@ -263,7 +269,7 @@ jwt s3이미지 업로드, 불러오기 ,weatherapi-geocoding
 
 
 
-## 후기
+# 후기
 구성원들 모두 프론트와 백엔드의 협업 프로젝트는 처음이지만 서로 많이 질의하며 협업에 대해 알게된것같다.
 
 원래 백엔드가 2명이었지만 1분이 나가셔서 혼자 하게되었는데. 혼자 정해진 기간내에 프로젝트를 완성해야되다 보니까 많이 걱정되고 불안했지만 
