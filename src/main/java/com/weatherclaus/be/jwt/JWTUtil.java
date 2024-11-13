@@ -22,6 +22,9 @@ public class JWTUtil {
     @Value("${JWT_REFRESH_EXPIREDMS}")
     private Long refreshTokenExpiredMs;
 
+    @Value("${JWT_SECOND_EXPIREDMS}")
+    private Long secondTokenExpiredMs;
+
     private SecretKey secretKey;
 
 
@@ -90,12 +93,23 @@ public class JWTUtil {
                 .compact();
     }
 
+    public String createSecondJwt(String username) {
+
+        return Jwts.builder()
+                .claim("category", "second")
+                .claim("username", username)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + secondTokenExpiredMs))
+                .signWith(secretKey)
+                .compact();
+    }
+
     public Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge((int)(refreshTokenExpiredMs / 1000));  // 밀리초를 초로 변환
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
+        cookie.setSecure(true);
 
         return cookie;
     }

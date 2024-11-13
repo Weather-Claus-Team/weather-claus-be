@@ -1,8 +1,10 @@
 package com.weatherclaus.be.websocket.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.weatherclaus.be.jwt.JWTUtil;
 import com.weatherclaus.be.websocket.dto.ChatListResponse;
 import com.weatherclaus.be.websocket.service.ChatService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -21,12 +23,14 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     private ObjectMapper objectMapper;
 
     private final ChatService chatService;
+    private final JWTUtil jwtUtil;
 
     public MyWebSocketHandler(ChatService chatService
-            , ObjectMapper objectMapper
+            , ObjectMapper objectMapper,JWTUtil jwtUtil
     ) {
         this.chatService = chatService;
         this.objectMapper = objectMapper;
+        this.jwtUtil = jwtUtil;
     }
 
 
@@ -34,10 +38,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
         CLIENTS.put(session.getId(), session);
-
-//        String username = (String) session.getAttributes().get("username");
-//        log.info("User " + username + " connected.");
-//        // 연결 성공 시, 특정 사용자 정보를 기반으로 세션을 관리
     }
 
     @Override
