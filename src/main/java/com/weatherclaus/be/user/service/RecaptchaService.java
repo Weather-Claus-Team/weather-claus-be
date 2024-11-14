@@ -13,9 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 @Slf4j
 public class RecaptchaService {
@@ -49,5 +46,5 @@ public class RecaptchaService {
             throw new RecaptchaTokenInvalidException("Invalid recaptcha token");
         }
     }
-    }
 }
+
