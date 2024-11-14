@@ -21,7 +21,6 @@ public class RecaptchaService {
     private String secretKey;
 
     public void verifyRecaptcha(String token) {
-        log.info("Token: {}", token);
 
         String url = "https://www.google.com/recaptcha/api/siteverify";
         RestTemplate restTemplate = new RestTemplate();
@@ -39,6 +38,9 @@ public class RecaptchaService {
 
         // 요청 전송 및 응답 수신
         RecaptchaResponse response = restTemplate.postForObject(url, requestEntity, RecaptchaResponse.class);
+
+        log.info("Recaptcha response: {}", response);
+
 
         boolean result = response != null && response.isSuccess();
         if (!result) {
