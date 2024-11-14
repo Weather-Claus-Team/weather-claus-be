@@ -24,24 +24,30 @@ public class RecaptchaService {
     private String secretKey;
 
     public void verifyRecaptcha(String token) {
-
-        log.info("token"+token);
+        log.info("Token: {}", token);
 
         String url = "https://www.google.com/recaptcha/api/siteverify";
         RestTemplate restTemplate = new RestTemplate();
 
-        Map<String, String> params = new HashMap<>();
-        params.put("secret", secretKey);
-        params.put("response", token);
+        // 요청 파라미터를 form data 형식으로 설정
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("secret", secretKey);
+        params.add("response", token);
 
-        // 헤더와 바디를 포함한 HttpEntity 생성
-        RecaptchaResponse response = restTemplate.postForObject(url, params, RecaptchaResponse.class);
+        // 요청 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+
+        // 요청 전송 및 응답 수신
+        RecaptchaResponse response = restTemplate.postForObject(url, requestEntity, RecaptchaResponse.class);
 
         boolean result = response != null && response.isSuccess();
-
-        if(!result) {
-            log.info("invalid recaptcha token");
-            throw new RecaptchaTokenInvalidException("invalid recaptcha token");
+        if (!result) {
+            log.error("Invalid recaptcha token");
+            throw new RecaptchaTokenInvalidException("Invalid recaptcha token");
         }
+    }
     }
 }
