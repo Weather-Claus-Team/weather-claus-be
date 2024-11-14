@@ -74,6 +74,7 @@ public class UserService {
 
     // User 엔터티 생성 메서드
     private User createUser(JoinRequest joinRequest) {
+
         return User.builder()
                 .username(joinRequest.getUsername())
                 .email(joinRequest.getEmail())
