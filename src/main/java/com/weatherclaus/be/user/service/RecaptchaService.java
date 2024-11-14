@@ -25,6 +25,8 @@ public class RecaptchaService {
 
     public void verifyRecaptcha(String token) {
 
+        log.info("token"+token);
+
         String url = "https://www.google.com/recaptcha/api/siteverify";
         RestTemplate restTemplate = new RestTemplate();
 
