@@ -27,7 +27,6 @@ public class ChatService {
 
     private final ChatMessageRepository chatMessageRepository;
     private final UserService userService;
-    private final ProfileService profileService;
 
 
 
@@ -47,6 +46,10 @@ public class ChatService {
 
 
         return new ChatListResponse(savedChatMessage.getMessage(), savedChatMessage.getSentDate(), savedChatMessage.getUser().getNickname(), savedChatMessage.getUser().getImageUrl());
+    }
+
+    public void deleteMessage(User user) {
+        chatMessageRepository.deleteByUserId(user.getId());
     }
 
 
