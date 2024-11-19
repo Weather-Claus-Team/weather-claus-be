@@ -78,7 +78,7 @@ public class UserService {
         return User.builder()
                 .username(joinRequest.getUsername())
                 .email(joinRequest.getEmail())
-                .nickname(UUID.randomUUID().toString())
+                .nickname("유저"+ (UUID.randomUUID().toString().substring(0,4)))
                 .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
                 .password(bCryptPasswordEncoder.encode(joinRequest.getPassword()))
                 .imageUrl(imageUrl)
