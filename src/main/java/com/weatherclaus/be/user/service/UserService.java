@@ -39,7 +39,7 @@ public class UserService {
     public void registerUser(JoinRequest joinRequest) {
 
 
-//        recaptchaCheck(joinDTO.getToken());
+        recaptchaCheck(joinRequest.getToken());
         checkEmailDuplicate(joinRequest.getEmail());
         usernameDuplicateCheck(joinRequest.getUsername());
 
@@ -51,11 +51,8 @@ public class UserService {
 
     private void recaptchaCheck(String token) {
 
-        boolean isHuman = recaptchaService.verifyRecaptcha(token);
+        recaptchaService.verifyRecaptcha(token);
 
-        if (!isHuman) {
-            throw new RecaptchaTokenInvalidException("invalid recaptcha token");
-        }
     }
 
 
@@ -77,10 +74,11 @@ public class UserService {
 
     // User 엔터티 생성 메서드
     private User createUser(JoinRequest joinRequest) {
+
         return User.builder()
                 .username(joinRequest.getUsername())
                 .email(joinRequest.getEmail())
-                .nickname(UUID.randomUUID().toString())
+                .nickname("유저"+ (UUID.randomUUID().toString().substring(0,4)))
                 .role(Role.USER) // 기본적으로 USER 설정, 필요에 따라 변경 가능
                 .password(bCryptPasswordEncoder.encode(joinRequest.getPassword()))
                 .imageUrl(imageUrl)

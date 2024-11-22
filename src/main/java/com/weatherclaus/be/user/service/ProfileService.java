@@ -8,6 +8,7 @@ import com.weatherclaus.be.user.entity.User;
 import com.weatherclaus.be.user.exception.AuthenticationNotValid;
 import com.weatherclaus.be.user.exception.PasswordMismatchException;
 import com.weatherclaus.be.user.repository.UserRepsotiroy;
+import com.weatherclaus.be.websocket.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class ProfileService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final S3Service s3Service;
     private final UserService userService;
+    private final ChatService chatService;
 
     @Value("${USER_BASIC_IMAGE}")
     private String basic_Image;
@@ -123,6 +125,8 @@ public class ProfileService {
 
     public void deleteUser() {
         User user = getUser();
+
+        chatService.deleteMessage(user);
 
         userService.deleteUser(user);
     }
