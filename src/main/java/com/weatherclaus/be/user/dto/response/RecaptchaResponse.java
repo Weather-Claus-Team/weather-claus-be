@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class RecaptchaResponse {
-    private boolean success;
+    private boolean success = false; // 기본값을 false로 설정
 }

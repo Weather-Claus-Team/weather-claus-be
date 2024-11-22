@@ -189,11 +189,11 @@ public class ChatMessage {
 ```
 
 ## custom validator 및 validation 사용
-```
+```java
 @Override
-  public void validate(Object target, Errors errors) {
-
-      UpdatePasswordRequest request = (UpdatePasswordRequest) target;
+public void validate(Object target, Errors errors) {
+    
+    UpdatePasswordRequest request = (UpdatePasswordRequest) target;
 
       // 두 개의 비밀번호가 일치하는지 검증
       if (!request.getPassword().equals(request.getPassword2())) {
@@ -293,7 +293,7 @@ public class ChatMessage {
 
 - 웹소켓 업그레이드 : 채팅방을 개별로 생성하고, 채팅방을 나가거나 생성할 수 있습니다.
 
-- 리캡챠 : Google reCAPTCHA를 사용하여 봇을 방지합니다.
+- 리캡챠 : Google reCAPTCHA를 사용하여 봇을 방지합니다. ( 완료 )
 
 
 
