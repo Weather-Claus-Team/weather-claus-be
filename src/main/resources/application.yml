@@ -4,7 +4,6 @@ spring:
     include: secret
 
 
-
 #    배포테스트 시 dev 활성화
 #    active: dev
 
