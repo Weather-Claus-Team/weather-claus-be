@@ -15,7 +15,7 @@
 ► 해당 readme는 웨더 클로스 프로젝트 ${\textsf{\color{LightSalmon}백엔드(BE)}}$ readme 입니다 (팀 readme는 아래 참고 부탁드립니다)
 <br>
 ## 프로젝트 주소
-~~웨더클로스 웹 : [weather-claus-web](https://weather-claus.netlify.app)~~
+~~웨더클로스 웹~~ ( 배포중단 ) : ~~[weather-claus-web](https://weather-claus.netlify.app)~~
 
 
 웨더클로스 팀  : [weather-claus-team](https://github.com/Weather-Claus-Team)
